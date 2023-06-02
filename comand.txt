@@ -1,28 +1,27 @@
-Здесь я опишу все команды которые использую
+# Здесь я опишу все команды которые использую
 
-UVICORN
-Запуск проекта:
-uvicorn main:app --reload
+# UVICORN
+# Запуск проекта:
+# uvicorn main:app --reload
 
-ALEMBIC
-#
-alembic init migration
-Создание новой миграции:
-alembic revision --autogenerate -m "Database creation"
-Активация нужной миграции по хешу:
-alembic upgrade c2b73a3ca765
 
-REDIS
-redis-server запуск редис сервера
-redis-cli запуск редис клиента
+# ALEMBIC
+# Создание новой миграции:
+# alembic revision --autogenerate -m "Database creation"
+# Активация нужной миграции по хешу:
+# alembic upgrade c2b73a3ca765
 
-CELERY
-# Запус celery
-(venv) ajdamir.karaziev@MacBook-Air-Karaziev src % celery -A tasks.tasks:celery worker --loglevel=INFO
-# Заупск Celery Flower
-(venv) ajdamir.karaziev@MacBook-Air-Karaziev src % celery -A tasks.tasks:celery flower
+# REDIS
+# redis-server запуск редис сервера
+# redis-cli запуск редис клиента
 
-PYTEST
-# запуск тестов
-pytest -v -s tests/
-(-s выводит принты)
+# CELERY
+# # Запус celery
+# (venv) ajdamir.karaziev@MacBook-Air-Karaziev src % celery -A tasks.tasks:celery worker --loglevel=INFO
+# # Заупск Celery Flower
+# (venv) ajdamir.karaziev@MacBook-Air-Karaziev src % celery -A tasks.tasks:celery flower
+
+# PYTEST
+# # запуск тестов
+# pytest -v -s tests/
+# (-s выводит принты)

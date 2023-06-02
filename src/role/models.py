@@ -1,6 +1,6 @@
 from sqlalchemy import Table, Column, Integer, String, TIMESTAMP, ForeignKey, JSON, Boolean
 
-from database import Base, metadata
+from src.database import Base, metadata
 
 
 class Role(Base):

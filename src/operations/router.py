@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi_cache.decorator import cache
 
 from core.response import SingleEntityResponse
-from database import get_async_session
+from database import get_session
 # from operations.getters import get_operation
 from operations.getters import get_operation
 from operations.models import operation
@@ -30,7 +30,7 @@ def get_long_op():
 @router.get("", response_model=SingleEntityResponse)
 async def get_specific_operations(
         operation_type: str,
-        session: AsyncSession = Depends(get_async_session),
+        session: AsyncSession = Depends(get_session),
 ):
     try:
         query = select(operation).where(operation.c.type == operation_type)
@@ -55,7 +55,7 @@ async def get_specific_operations(
 
 
 @router.post("")
-async def add_specific_operations(new_operation: OperationCreate, session: AsyncSession = Depends(get_async_session)):
+async def add_specific_operations(new_operation: OperationCreate, session: AsyncSession = Depends(get_session)):
     """
     docstring
     """
