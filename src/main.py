@@ -10,7 +10,7 @@ from operations.router import router as router_operation
 from tasks.router import router as router_tasks
 
 app = FastAPI(
-    title="Trading App"
+    title="Delivery App"
 )
 
 app.include_router(
