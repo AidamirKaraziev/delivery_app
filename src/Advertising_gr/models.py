@@ -1,10 +1,9 @@
 from sqlalchemy import Table, Column, Integer, String, TIMESTAMP, ForeignKey, JSON, Boolean
 
-from src.database import Base, metadata
+from database import Base, metadata
 
 
-class Role(Base):
-    __tablename__ = "role"
+class AdvertisingGr(Base):
+    __tablename__ = "advertising_gr"
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
-    permissions = Column(JSON)

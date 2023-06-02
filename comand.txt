@@ -4,6 +4,7 @@
 # Запуск проекта:
 # uvicorn main:app --reload
 
+
 # ALEMBIC
 # Создание новой миграции:
 # alembic revision --autogenerate -m "Database creation"
