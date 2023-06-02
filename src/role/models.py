@@ -5,6 +5,7 @@ from src.database import Base, metadata
 
 class Role(Base):
     __tablename__ = "role"
+    metadata = Base.metadata
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     permissions = Column(JSON)
