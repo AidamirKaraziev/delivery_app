@@ -5,6 +5,8 @@ UVICORN
 uvicorn main:app --reload
 
 ALEMBIC
+#
+alembic init migration
 Создание новой миграции:
 alembic revision --autogenerate -m "Database creation"
 Активация нужной миграции по хешу:
