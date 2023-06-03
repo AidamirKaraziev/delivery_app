@@ -1,12 +1,14 @@
-from sqlalchemy import Table, Column, Integer, String, TIMESTAMP, ForeignKey, JSON, Boolean
+from sqlalchemy import Table, Column, Integer, String, TIMESTAMP, ForeignKey, JSON, Boolean, MetaData
 
-from src.database import Base
+from database import Base
+metadata = MetaData()
 
 
 class Role(Base):
     __tablename__ = "role"
-    metadata = Base.metadata
+    metadata = metadata
 
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     permissions = Column(JSON)
+
