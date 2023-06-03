@@ -3,7 +3,7 @@ from datetime import datetime
 from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable
 from sqlalchemy import Table, Column, Integer, String, TIMESTAMP, ForeignKey, JSON, Boolean, MetaData
 
-from src.database import Base, metadata
+from src.database import Base
 from src.role.models import Role
 
 
@@ -19,7 +19,7 @@ class User(SQLAlchemyBaseUserTable[int], Base):
     phone_number = Column(String, nullable=False)
     registered_at = Column(TIMESTAMP, default=datetime.utcnow)
 
-    hashed_password: str = Column(String(length=1024), nullable=False)
+    password: str = Column(String(length=1024), nullable=False)
     role_id = Column(Integer, ForeignKey("role.id", ondelete="SET NULL"))
     is_active: bool = Column(Boolean, default=True, nullable=False)
     is_superuser: bool = Column(Boolean, default=False, nullable=False)

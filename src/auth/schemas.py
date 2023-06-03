@@ -29,9 +29,23 @@ class UserCreate(schemas.BaseUserCreate):
 
     email: str
     phone_number: str
-    registered_atutcnow: datetime
 
-    hashed_password: str
+    password: str
+    role_id: int
+    is_active: Optional[bool] = True
+    is_superuser: Optional[bool] = False
+    is_verified: Optional[bool] = False
+
+
+class UserUpdate(schemas.BaseUserUpdate):
+    id: int
+    name: str
+    photo: str
+
+    email: str
+    phone_number: str
+
+    password: str
     role_id: int
     is_active: Optional[bool] = True
     is_superuser: Optional[bool] = False

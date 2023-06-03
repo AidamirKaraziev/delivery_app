@@ -1,5 +1,5 @@
-from Advertising_gr.models import AdvertisingGr
-from Advertising_gr.schemas import AdvertisingGrCreate, AdvertisingGrUpdate
+from advertising_gr.models import AdvertisingGr
+from advertising_gr.schemas import AdvertisingGrCreate, AdvertisingGrUpdate
 from core.base_crud import CRUDBase
 
 
