@@ -1,6 +1,7 @@
-from sqlalchemy import Table, Column, Integer, String, TIMESTAMP, ForeignKey, JSON, Boolean
+from sqlalchemy import Table, Column, Integer, String, TIMESTAMP, ForeignKey, JSON, Boolean, MetaData
 
-from src.database import Base, metadata
+from database import Base
+metadata = MetaData()
 
 
 class AdvertisingGr(Base):

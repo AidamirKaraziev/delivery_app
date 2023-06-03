@@ -42,7 +42,6 @@ pendulum==2.1.2
 pluggy==1.0.0
 prometheus-client==0.17.0
 prompt-toolkit==3.0.38
-psycopg2==2.9.6
 pycparser==2.21
 pydantic==1.10.8
 PyJWT==2.6.0
