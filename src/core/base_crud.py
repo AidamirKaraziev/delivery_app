@@ -95,6 +95,31 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         await db_session.refresh(db_obj)
         return db_obj
 
+    async def update(
+        self,
+        *,
+        obj_current: ModelType,
+        obj_new: UpdateSchemaType | dict[str, Any] | ModelType,
+        db_session: AsyncSession | None = None,
+    ) -> ModelType:
+        db_session = db_session or self.db.session
+        obj_data = jsonable_encoder(obj_current)
+
+        if isinstance(obj_new, dict):
+            update_data = obj_new
+        else:
+            update_data = obj_new.dict(
+                exclude_unset=True
+            )  # This tells Pydantic to not include the values that were not sent
+        for field in obj_data:
+            if field in update_data:
+                setattr(obj_current, field, update_data[field])
+
+        db_session.add(obj_current)
+        await db_session.commit()
+        await db_session.refresh(obj_current)
+        return obj_current
+
     # async def get_count(
     #     self, db_session: AsyncSession | None = None
     # ) -> ModelType | None:
@@ -176,31 +201,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     #     return response.scalars().all()
     #
 
-    # async def update(
-    #     self,
-    #     *,
-    #     obj_current: ModelType,
-    #     obj_new: UpdateSchemaType | dict[str, Any] | ModelType,
-    #     db_session: AsyncSession | None = None,
-    # ) -> ModelType:
-    #     db_session = db_session or self.db.session
-    #     obj_data = jsonable_encoder(obj_current)
-    #
-    #     if isinstance(obj_new, dict):
-    #         update_data = obj_new
-    #     else:
-    #         update_data = obj_new.dict(
-    #             exclude_unset=True
-    #         )  # This tells Pydantic to not include the values that were not sent
-    #     for field in obj_data:
-    #         if field in update_data:
-    #             setattr(obj_current, field, update_data[field])
-    #
-    #     db_session.add(obj_current)
-    #     await db_session.commit()
-    #     await db_session.refresh(obj_current)
-    #     return obj_current
-    #
+
     # async def remove(
     #     self, *, id: UUID | str, db_session: AsyncSession | None = None
     # ) -> ModelType:

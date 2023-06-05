@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from advertising_gr.crud import crud_ad_gr
 from advertising_gr.getters import getting_ad_gr
-from advertising_gr.schemas import AdvertisingGrCreate
+from advertising_gr.schemas import AdvertisingGrCreate, AdvertisingGrUpdate
 
 from core.response import SingleEntityResponse, ListOfEntityResponse, Meta
 from database import get_async_session
@@ -42,8 +42,8 @@ async def get_ad_gr(
 ):
     obj, code, indexes = await crud_ad_gr.get_ad_gr_by_id(db=session, ad_gr_id=ad_gr_id)
     # ошибки обработать
-    if code == -2:
-        return SingleEntityResponse(data="ERROR")
+    if code != 0:
+        return SingleEntityResponse(data=f"ERROR: {code}")
     return SingleEntityResponse(data=getting_ad_gr(obj=obj))
 
 
@@ -58,8 +58,27 @@ async def create_ad_gr(
 ):
     obj, code, indexes = await crud_ad_gr.create_ad_gr(db=session, new_data=new_data)
     # ошибки обработать
-    if code == -3:
-        return SingleEntityResponse(data="ERROR")
+    if code != 0:
+        return SingleEntityResponse(data=f"ERROR: {code}")
+    return SingleEntityResponse(data=getting_ad_gr(obj=obj))
+
+
+@router.put("/",
+            response_model=SingleEntityResponse,
+            name='Изменить рекламируемую группу',
+            description='Изменить рекламируемую группу'
+            )
+async def update_ad_gr(
+        update_data: AdvertisingGrUpdate,
+        ad_gr_id: int,
+        session: AsyncSession = Depends(get_async_session),
+):
+    obj, code, indexes = await crud_ad_gr.update_ad_gr(db=session,
+                                                       update_data=update_data,
+                                                       ad_gr_id=ad_gr_id)
+    # ошибки обработать
+    if code != 0:
+        return SingleEntityResponse(data=f"ERROR: {code}")
     return SingleEntityResponse(data=getting_ad_gr(obj=obj))
 
 
