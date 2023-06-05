@@ -7,7 +7,9 @@ from sqlalchemy.orm import Session
 
 
 class CrudRole(CRUDBase[Role, RoleCreate, RoleUpdate]):
-    pass
+    async def get_role_by_id(self):
+
+        return
 
 
 crud_role = CrudRole(Role)

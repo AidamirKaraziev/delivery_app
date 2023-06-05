@@ -7,15 +7,16 @@ from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, Union, Tup
 from fastapi import UploadFile
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, Field
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.db.base_class import Base
+# from app.db.base_class import Base
+# from app.core.response import Paginator
+# from app.utils import pagination
 
-from app.core.response import Paginator
-from app.utils import pagination
 
-from app.exceptions import UnfoundEntity, UnprocessableEntity
-
+from core.exception import UnprocessableEntity, UnfoundEntity
+from database import Base
 
 ModelType = TypeVar("ModelType", bound=Base)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
@@ -34,20 +35,24 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         """
         self.model = model
 
-    def get(self, db: Session, id: Any) -> Optional[ModelType]:
-        return db.query(self.model).filter(self.model.id == id).first()
+    # def get(self, db: Session, id: Any) -> Optional[ModelType]:
+    #     return db.query(self.model).filter(self.model.id == id).first()
 
     # def get_multi(
     #     self, db: Session, *, skip: int = 0, limit: int = 100
     # ) -> List[ModelType]:
     #     return db.query(self.model).offset(skip).limit(limit).all()
-
-    def get_multi(
-            self, db: Session, *, page: Optional[int] = None
-    ) -> Tuple[List[ModelType], Paginator]:
-
-        query = db.query(self.model)
-        return pagination.get_page(query, page)
+    async def get(self, db: Session, id: Any) -> Optional[ModelType]:
+        # session: AsyncSession = Depends(get_async_session)
+        query = select(self.model).where(self.model.id == id)
+        result = await db.execute(query)
+        return result.first()
+    # def get_multi(
+    #         self, db: Session, *, page: Optional[int] = None
+    # ) -> Tuple[List[ModelType], Paginator]:
+    #
+    #     query = db.query(self.model)
+    #     return pagination.get_page(query, page)
 
     def create(self, db: Session, obj_in: CreateSchemaType) -> ModelType:
         obj_in_data = jsonable_encoder(obj_in)
