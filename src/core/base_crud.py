@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 from fastapi import HTTPException
 from typing import Any, Generic, TypeVar
-from uuid import UUID
+
 # from app.schemas.common_schema import IOrderEnum
 # from fastapi_pagination.ext.async_sqlalchemy import paginate
 from fastapi_async_sqlalchemy import db
@@ -9,26 +11,25 @@ from fastapi_async_sqlalchemy import db
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
 # from sqlmodel import SQLModel, select, func
-# from sqlmodel.ext.asyncio.session import AsyncSession
-from sqlalchemy.ext.asyncio import AsyncSession
-# from sqlmodel.sql.expression import Select
-from sqlalchemy import exc, select
-# from sqlalchemy.testing import db
 
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from sqlalchemy import exc, select
 from database import Base
 
 ModelType = TypeVar("ModelType", bound=Base)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
 UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
-
-# ModelType = TypeVar("ModelType", bound=SQLModel)
-# CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
-# UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
 SchemaType = TypeVar("SchemaType", bound=BaseModel)
+
+
 # T = TypeVar("T", bound=SQLModel)
 
 
 class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
+
+    # def get_db(self) -> DBSessionMeta:
+    #     return self.db
     def __init__(self, model: type[ModelType]):
         """
         CRUD object with default methods to Create, Read, Update, Delete (CRUD).
@@ -39,11 +40,8 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         self.model = model
         self.db = db
 
-    # def get_db(self) -> DBSessionMeta:
-    #     return self.db
-
     async def get(
-        self, *, id: int, db: AsyncSession | None = None
+            self, *, id: int, db: AsyncSession | None = None
     ) -> ModelType | None:
         db_session = db or self.db.session
         query = select(self.model).where(self.model.id == id)
@@ -51,16 +49,51 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         return response.scalar_one_or_none()
 
     async def get_by_ids(
-        self,
-        *,
-        list_ids: list[int],
-        db_session: AsyncSession | None = None,
+            self,
+            *,
+            list_ids: list[int],
+            db_session: AsyncSession | None = None,
     ) -> list[ModelType] | None:
         db_session = db_session or self.db.session
         response = await db_session.execute(
             select(self.model).where(self.model.id.in_(list_ids))
         )
         return response.scalars().all()
+
+    async def get_multi(
+            self,
+            *,
+            skip: int = 0,
+            limit: int = 100,
+            db_session: AsyncSession | None = None,
+    ) -> list[ModelType]:
+        db_session = db_session or self.db.session
+        query = select(self.model).offset(skip).limit(limit).order_by(self.model.id)
+        response = await db_session.execute(query)
+        return response.scalars().all()
+
+    async def create(
+            self,
+            *,
+            obj_in: CreateSchemaType | ModelType,
+            db_session: AsyncSession | None = None,
+    ) -> ModelType:
+        db_session = db_session or self.db.session
+
+        obj_in_data = jsonable_encoder(obj_in)
+        db_obj = self.model(**obj_in_data)  # type: ignore
+
+        try:
+            db_session.add(db_obj)
+            await db_session.commit()
+        except exc.IntegrityError:
+            await db_session.rollback()
+            raise HTTPException(
+                status_code=409,
+                detail="Resource already exists",
+            )
+        await db_session.refresh(db_obj)
+        return db_obj
 
     # async def get_count(
     #     self, db_session: AsyncSession | None = None
@@ -71,19 +104,6 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     #     )
     #     return response.scalar_one()
     #
-    async def get_multi(
-        self,
-        *,
-        skip: int = 0,
-        limit: int = 100,
-        # query: T | Select[T] | None = None,
-        db_session: AsyncSession | None = None,
-    ) -> list[ModelType]:
-        db_session = db_session or self.db.session
-        # if query is None:
-        query = select(self.model).offset(skip).limit(limit).order_by(self.model.id)
-        response = await db_session.execute(query)
-        return response.scalars().all()
 
     # async def get_multi_paginated(
     #     self,
@@ -155,31 +175,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     #     response = await db_session.execute(query)
     #     return response.scalars().all()
     #
-    # async def create(
-    #     self,
-    #     *,
-    #     obj_in: CreateSchemaType | ModelType,
-    #     created_by_id: UUID | str | None = None,
-    #     db_session: AsyncSession | None = None,
-    # ) -> ModelType:
-    #     db_session = db_session or self.db.session
-    #     db_obj = self.model.from_orm(obj_in)  # type: ignore
-    #
-    #     if created_by_id:
-    #         db_obj.created_by_id = created_by_id
-    #
-    #     try:
-    #         db_session.add(db_obj)
-    #         await db_session.commit()
-    #     except exc.IntegrityError:
-    #         db_session.rollback()
-    #         raise HTTPException(
-    #             status_code=409,
-    #             detail="Resource already exists",
-    #         )
-    #     await db_session.refresh(db_obj)
-    #     return db_obj
-    #
+
     # async def update(
     #     self,
     #     *,
