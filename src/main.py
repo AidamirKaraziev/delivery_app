@@ -7,7 +7,7 @@ from auth.base_config import auth_backend, fastapi_users
 from auth.schemas import UserRead, UserCreate
 
 from role.router import router as router_role
-from advertising_gr.router import router as router_ad_gr
+from promo.router import router as router_promo
 
 app = FastAPI(
     title="Delivery App"
@@ -26,7 +26,7 @@ app.include_router(
 )
 
 app.include_router(router_role)
-app.include_router(router_ad_gr)
+app.include_router(router_promo)
 
 
 @app.on_event("startup")

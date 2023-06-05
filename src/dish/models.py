@@ -17,5 +17,5 @@ class Dish(Base):
     composition = Column(String, nullable=True)
     price = Column(Float, nullable=False)
 
-    advertising_gr_id = Column(Integer, ForeignKey("advertising_gr.id", ondelete="SET NULL"))
+    advertising_gr_id = Column(Integer, ForeignKey("promo.id", ondelete="SET NULL"))
     visible = Column(Boolean, default=True, nullable=False)

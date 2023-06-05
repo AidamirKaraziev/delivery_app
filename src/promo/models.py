@@ -4,8 +4,8 @@ from database import Base
 metadata = MetaData()
 
 
-class AdvertisingGr(Base):
-    __tablename__ = "advertising_gr"
+class Promo(Base):
+    __tablename__ = "promo"
 
     metadata = metadata
     id = Column(Integer, primary_key=True)

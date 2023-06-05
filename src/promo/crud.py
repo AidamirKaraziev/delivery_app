@@ -1,25 +1,25 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from advertising_gr.models import AdvertisingGr
-from advertising_gr.schemas import AdvertisingGrCreate, AdvertisingGrUpdate
+from promo.models import Promo
+from promo.schemas import PromoUpdate, PromoCreate
 
 from core.base_crud import CRUDBase
 
 
-class CrudAdvertisingGr(CRUDBase[AdvertisingGr, AdvertisingGrCreate, AdvertisingGrUpdate]):
+class CrudPromo(CRUDBase[Promo, PromoCreate, PromoUpdate]):
 
-    async def get_ad_gr_by_id(self, *, db: AsyncSession, ad_gr_id: int):
-        obj = await super().get(db=db, id=ad_gr_id)
+    async def get_promo_by_id(self, *, db: AsyncSession, promo_id: int):
+        obj = await super().get(db=db, id=promo_id)
         if obj is None:
             return None, -2, None
         return obj, 0, None
 
-    async def get_all_ad_gr(self, *, db: AsyncSession, skip: int, limit: int):
+    async def get_all_promo(self, *, db: AsyncSession, skip: int, limit: int):
         objects = await super().get_multi(db_session=db, skip=skip, limit=limit)
         return objects, 0, None
 
-    async def create_ad_gr(self, *, db: AsyncSession, new_data: AdvertisingGrCreate):
+    async def create_promo(self, *, db: AsyncSession, new_data: PromoCreate):
         # check name
         query = select(self.model).where(self.model.name == new_data.name)
         response = await db.execute(query)
@@ -28,9 +28,9 @@ class CrudAdvertisingGr(CRUDBase[AdvertisingGr, AdvertisingGrCreate, Advertising
         objects = await super().create(db_session=db, obj_in=new_data)
         return objects, 0, None
 
-    async def update_ad_gr(self, *, db: AsyncSession, update_data: AdvertisingGrCreate, ad_gr_id: int):
+    async def update_promo(self, *, db: AsyncSession, update_data: PromoUpdate, promo_id: int):
         # check id
-        query = select(self.model).where(self.model.id == ad_gr_id)
+        query = select(self.model).where(self.model.id == promo_id)
         resp = await db.execute(query)
         this_obj = resp.scalar_one_or_none()
         if this_obj is None:
@@ -44,4 +44,4 @@ class CrudAdvertisingGr(CRUDBase[AdvertisingGr, AdvertisingGrCreate, Advertising
         return objects, 0, None
 
 
-crud_ad_gr = CrudAdvertisingGr(AdvertisingGr)
+crud_promo = CrudPromo(Promo)
