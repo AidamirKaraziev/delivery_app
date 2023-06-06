@@ -20,12 +20,13 @@ router = APIRouter(
 )
 
 
-@router.get('/all',
+@router.get(
+            path='/all',
             response_model=ListOfEntityResponse,
-            name='Список рекламируемых групп',
+            name='get_promos',
             description='Получение списка всех рекламируемых групп'
             )
-async def get_promo(
+async def get_promos(
         skip: int = 0,
         limit: int = 100,
         user: User = Depends(current_active_user),
@@ -35,10 +36,11 @@ async def get_promo(
     return ListOfEntityResponse(data=[getting_promo(obj) for obj in objects])
 
 
-@router.get("/",
+@router.get(
+            path="/{promo_id}",
             response_model=SingleEntityResponse,
-            name='Вывод рекламируемой группы по айди',
-            description='Вывод рекламируемой группы по айди'
+            name='get_promo',
+            description='Вывод рекламируемой группы по идентификатору'
             )
 async def get_promo(
         promo_id: int,
@@ -52,9 +54,9 @@ async def get_promo(
     return SingleEntityResponse(data=getting_promo(obj=obj))
 
 
-@router.post("/",
+@router.post(path="/{promo_id}",
              response_model=SingleEntityResponse,
-             name='Создать рекламируемую группу',
+             name='create_promo',
              description='Создать рекламируемую группу'
              )
 async def create_promo(
@@ -69,9 +71,9 @@ async def create_promo(
     return SingleEntityResponse(data=getting_promo(obj=obj))
 
 
-@router.put("/",
+@router.put(path="/{promo_id}",
             response_model=SingleEntityResponse,
-            name='Изменить рекламируемую группу',
+            name='update_promo',
             description='Изменить рекламируемую группу'
             )
 async def update_promo(
