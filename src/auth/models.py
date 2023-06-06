@@ -1,11 +1,10 @@
 from datetime import datetime
 
 from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable
-from sqlalchemy import Table, Column, Integer, String, TIMESTAMP, ForeignKey, JSON, Boolean, MetaData
+from sqlalchemy import Column, Integer, String, TIMESTAMP, ForeignKey, Boolean, MetaData
 from sqlalchemy.orm import relationship
 
 from database import Base
-# from role.models import Role
 from role.models import Role
 
 metadata = MetaData()
@@ -29,4 +28,4 @@ class User(SQLAlchemyBaseUserTable[int], Base):
     is_superuser: bool = Column(Boolean, default=False, nullable=False)
     is_verified: bool = Column(Boolean, default=False, nullable=False)
 
-    # role = relationship(Role)
+    role = relationship(Role)
