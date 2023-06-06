@@ -2,18 +2,18 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 
-class AdvertisingGrGet(BaseModel):
+class PromoGet(BaseModel):
     id: int
     name: str
 
 
 # формальность
-class AdvertisingGrCreate(BaseModel):
+class PromoCreate(BaseModel):
     name: str = Field(..., title="Должность")
 
 
 # формальность
-class AdvertisingGrUpdate(BaseModel):
+class PromoUpdate(BaseModel):
     name: str = Field(..., title="Должность")
 
 

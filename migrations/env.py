@@ -14,8 +14,7 @@ sys.path.append(os.path.join(sys.path[0], 'src'))
 from src.config import DB_HOST, DB_PORT, DB_USER, DB_NAME, DB_PASS
 from src.auth.models import metadata as metadata_auth
 from src.role.models import metadata as metadata_role
-from src.advertising_gr.models import metadata as metadata_ad_gr
-from src.dish.models import metadata as metadata_dish
+from src.promo.models import metadata as metadata_ad_gr
 
 
 # from src.database import metadata

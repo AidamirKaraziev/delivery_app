@@ -1,12 +1,8 @@
-from typing import Optional
-
-# from core.base_crud import CRUDBase
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.base_crud import CRUDBase
 from role.models import Role
-from role.schemas import RoleCreate, RoleUpdate, RoleGet
-from sqlalchemy.orm import Session
+from role.schemas import RoleCreate, RoleUpdate
 
 
 class CrudRole(CRUDBase[Role, RoleCreate, RoleUpdate]):

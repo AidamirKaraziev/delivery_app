@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from advertising_gr.getters import AdvertisingGrGet
+from promo.getters import AdvertisingGrGet
 
 
 class DishGet(BaseModel):
