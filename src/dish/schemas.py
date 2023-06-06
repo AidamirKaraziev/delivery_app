@@ -1,8 +1,10 @@
+from typing import Optional, Union
 from pydantic import BaseModel, Field
-from advertising_gr.getters import AdvertisingGrGet
+from promo.schemas import PromoGet
 
 
 class DishGet(BaseModel):
+
     id: int
     name: str
 
@@ -14,8 +16,8 @@ class DishGet(BaseModel):
     composition: str
     price: float
 
-    advertising_gr_id: int
-    visible: bool
+    promo_id: Optional[PromoGet] = None
+    visible: Optional[bool] = True
 
 
 class DishCreate(BaseModel):
@@ -30,7 +32,8 @@ class DishCreate(BaseModel):
     composition: str
     price: float
 
-    advertising_gr_id: AdvertisingGrGet
+    promo_id: Optional[int] = None
+    visible: Optional[bool] = True
 
 
 class DishUpdate(BaseModel):
@@ -44,5 +47,6 @@ class DishUpdate(BaseModel):
     composition: str
     price: float
 
-    advertising_gr_id: int
+    promo_id: Optional[int] = None
+    visible: Optional[bool] = True
 

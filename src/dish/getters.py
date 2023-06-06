@@ -1,8 +1,16 @@
 from typing import Optional
 from dish.schemas import DishGet
+from promo.schemas import PromoGet
 
 
-def get_dish(obj: DishGet) -> Optional[DishGet]:
+def getting_dish(obj: DishGet) -> Optional[DishGet]:
+
+    promo_data = None
+    if obj.promo:
+        promo_data = {
+            "id": obj.promo.id,
+            "name": obj.promo.name
+        }
 
     return DishGet(
         id=obj.id,
@@ -16,6 +24,6 @@ def get_dish(obj: DishGet) -> Optional[DishGet]:
         composition=obj.composition,
         price=obj.price,
 
-        advertising_gr_id=obj.advertising_gr_id,
+        promo_id=promo_data,
         visible=obj.visible,
     )

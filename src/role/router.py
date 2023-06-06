@@ -1,40 +1,53 @@
-import time
-import json
+import logging
 
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select, insert
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from fastapi_cache.decorator import cache
-
-from core.response import SingleEntityResponse, ListOfEntityResponse
-from database import get_async_session
+from auth.base_config import fastapi_users
+from auth.models import User
 from role.crud import crud_role
-from role.getters import get_role
-from role.models import Role
-from role.schemas import RoleGet
+from role.getters import getting_role
+
+from core.response import SingleEntityResponse, ListOfEntityResponse, Meta
+from database import get_async_session
+
+current_active_user = fastapi_users.current_user(active=True)
 
 router = APIRouter(
     prefix="/role",
     tags=["Role"]
 )
 
-#
-# @router.get("/roles",
-#             response_model=ListOfEntityResponse[RoleGet])
-# async def get_roles():
-#     return
 
-
-@router.get("/role",
-            response_model=SingleEntityResponse[RoleGet])
+@router.get('/all',
+            response_model=ListOfEntityResponse,
+            name='Список ролей',
+            description='Получение списка всех ролей'
+            )
 async def get_roles(
-        role_id: int,
+        skip: int = 0,
+        limit: int = 100,
+        user: User = Depends(current_active_user),
         session: AsyncSession = Depends(get_async_session),
 ):
+    objects, code, indexes = await crud_role.get_all_role(db=session, skip=skip, limit=limit)
+    return ListOfEntityResponse(data=[getting_role(obj) for obj in objects])
 
-    obj, code, indexes = crud_role.get(db=session, id=role_id)
-    # Вывод ошибки с подробным описанием(Личная разработка Айдамира Каразиева(пиздатого парня))
-    # get_raise(code=code)
 
-    return SingleEntityResponse(data=get_role(obj=obj))
+@router.get("/",
+            response_model=SingleEntityResponse
+            )
+async def get_role(
+        role_id: int,
+        user: User = Depends(current_active_user),
+        session: AsyncSession = Depends(get_async_session),
+):
+    obj, code, indexes = await crud_role.get_role_by_id(db=session, role_id=role_id)
+    # ошибки обработать
+    if code == -1:
+        return SingleEntityResponse(data="ERROR")
+    return SingleEntityResponse(data=getting_role(obj=obj))
+
+
+if __name__ == "__main__":
+    logging.info('Running...')

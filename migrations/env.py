@@ -14,7 +14,10 @@ sys.path.append(os.path.join(sys.path[0], 'src'))
 from src.config import DB_HOST, DB_PORT, DB_USER, DB_NAME, DB_PASS
 from src.auth.models import metadata as metadata_auth
 from src.role.models import metadata as metadata_role
-from src.advertising_gr.models import metadata as metadata_ad_gr
+from src.promo.models import metadata as metadata_promo
+from src.dish.models import metadata as metadata_dish
+from src.selling_point.models import metadata as metadata_selling_point
+from src.selling_point_type.models import metadata as metadata_sp_type
 
 
 # from src.database import metadata
@@ -40,7 +43,8 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = [metadata_auth, metadata_role, metadata_ad_gr]
+target_metadata = [metadata_auth, metadata_role, metadata_promo, metadata_dish,
+                   metadata_selling_point, metadata_sp_type]
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
