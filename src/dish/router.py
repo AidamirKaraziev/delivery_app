@@ -15,11 +15,11 @@ router = APIRouter(
 
 
 @router.get("/dish", response_model=SingleEntityResponse[DishGet])
-async def get_roles(
-        role_id: int,
+async def get_dish(
+        dish_id: int,
         session: AsyncSession = Depends(get_async_session)
 ):
 
-    obj, code, indexes = crud_dish.get(db=session, id=role_id)
+    obj, code, indexes = crud_dish.get(db=session, id=dish_id)
 
     return SingleEntityResponse(data=get_dish(obj=obj))

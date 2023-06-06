@@ -40,7 +40,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = [metadata_auth, metadata_role, metadata_ad_gr]
+target_metadata = [metadata_auth, metadata_role, metadata_ad_gr, metadata_dish]
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
