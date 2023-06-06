@@ -1,29 +1,20 @@
 from pydantic import BaseModel
 
 
-class SellingPointGet(BaseModel):
+class SellingPointTypeGet(BaseModel):
     id: int
     name: str
     photo: str
-    sp_type_id: int
-    address: str
-    client_id: int
 
 
-class SellingPointCreate(BaseModel):
+class SellingPointTypeCreate(BaseModel):
     id: int
     name: str
     photo: str
-    sp_type_id: int
-    address: str
-    client_id: int
 
 
-class SellingPointUpdate(BaseModel):
+class SellingPointTypeUpdate(BaseModel):
     id: int
     name: str
     photo: str
-    sp_type_id: int
-    address: str
-    client_id: int
 

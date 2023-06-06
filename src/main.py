@@ -8,6 +8,9 @@ from auth.schemas import UserRead, UserCreate
 
 from role.router import router as router_role
 from promo.router import router as router_promo
+from dish.router import router as router_dish
+from selling_point.router import router as router_selling_point
+from selling_point_type.router import router as router_sp_type
 
 app = FastAPI(
     title="Delivery App"
@@ -27,6 +30,9 @@ app.include_router(
 
 app.include_router(router_role)
 app.include_router(router_promo)
+app.include_router(router_dish)
+app.include_router(router_selling_point)
+app.include_router(router_sp_type)
 
 
 @app.on_event("startup")

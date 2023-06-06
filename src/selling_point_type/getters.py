@@ -1,14 +1,11 @@
 from typing import Optional
-from selling_point.schemas import SellingPointGet
+from selling_point_type.schemas import SellingPointTypeGet
 
 
-def get_dish(obj: SellingPointGet) -> Optional[SellingPointGet]:
+def getting_selling_point_type(selling_point_type: SellingPointTypeGet) -> Optional[SellingPointTypeGet]:
 
-    return SellingPointGet(
-        id=obj.id,
-        name=obj.name,
-        photo=obj.photo,
-        sp_type_id=obj.sp_type_id,
-        address=obj.address,
-        client_id=obj.client_id,
+    return SellingPointTypeGet(
+        id=selling_point_type.id,
+        name=selling_point_type.name,
+        photo=selling_point_type.photo
     )

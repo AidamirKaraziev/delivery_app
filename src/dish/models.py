@@ -1,7 +1,8 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Float, MetaData
+from sqlalchemy.orm import relationship
 from database import Base
 
-from advertising_gr.models import AdvertisingGr
+from promo.models import Promo
 
 metadata = MetaData()
 
@@ -21,5 +22,7 @@ class Dish(Base):
     composition = Column(String, nullable=True)
     price = Column(Float, nullable=False)
 
+    promo_id = Column(Integer, ForeignKey(Promo.id, ondelete="SET NULL"), nullable=True)
+    visible = Column(Boolean, nullable=False)
 
-    advertising_gr_id = Column(Integer, ForeignKey(AdvertisingGr.id, ondelete="SET NULL"))
+    promo = relationship("Promo", backref="dishes", lazy="joined")

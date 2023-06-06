@@ -14,7 +14,7 @@ from pydantic import BaseModel
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from sqlalchemy import exc, select
+from sqlalchemy import exc, select, delete
 from database import Base
 
 ModelType = TypeVar("ModelType", bound=Base)
@@ -119,6 +119,16 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         await db_session.commit()
         await db_session.refresh(obj_current)
         return obj_current
+
+    async def delete(self, *, id: int, db: AsyncSession | None = None):
+        db_session = db or self.db.session
+        obj = await self.get(db=db_session, id=id)  # Assuming you have a `get` method to retrieve the object by id
+        if obj is not None:
+            query = delete(self.model).where(self.model.id == id)
+            await db_session.execute(query)
+            await db_session.commit()
+        return obj
+
 
     # async def get_count(
     #     self, db_session: AsyncSession | None = None
