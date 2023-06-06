@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from fastapi import HTTPException
 from typing import Any, Generic, TypeVar
 from uuid import UUID

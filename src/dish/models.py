@@ -1,10 +1,14 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Float
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Float, MetaData
 from database import Base
+
+from advertising_gr.models import AdvertisingGr
+
+metadata = MetaData()
 
 
 class Dish(Base):
     __tablename__ = "dish"
-    metadata = Base.metadata
+    metadata = metadata
 
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
@@ -17,5 +21,5 @@ class Dish(Base):
     composition = Column(String, nullable=True)
     price = Column(Float, nullable=False)
 
-    advertising_gr_id = Column(Integer, ForeignKey("advertising_gr.id", ondelete="SET NULL"))
+    advertising_gr_id = Column(Integer, ForeignKey(AdvertisingGr.id, ondelete="SET NULL"))
     visible = Column(Boolean, default=True, nullable=False)
