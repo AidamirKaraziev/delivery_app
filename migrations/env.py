@@ -43,8 +43,8 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = [metadata_auth, metadata_role, metadata_promo, metadata_dish,
-                   metadata_selling_point, metadata_sp_type]
+target_metadata = [metadata_role, metadata_sp_type, metadata_auth, metadata_promo, metadata_dish,
+                   metadata_selling_point]
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

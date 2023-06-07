@@ -12,6 +12,7 @@ from promo.router import router as router_promo
 from dish.router import router as router_dish
 from selling_point.router import router as router_selling_point
 from selling_point_type.router import router as router_sp_type
+from user.router import router as router_user
 
 current_user = fastapi_users.current_user()
 
@@ -31,11 +32,19 @@ app.include_router(
     tags=["Auth"],
 )
 
+# сброс пароля
+app.include_router(
+    fastapi_users.get_reset_password_router(),
+    prefix="/auth",
+    tags=["auth"],
+)
+
 app.include_router(router_role)
 app.include_router(router_promo)
 app.include_router(router_dish)
 app.include_router(router_selling_point)
 app.include_router(router_sp_type)
+app.include_router(router_user)
 
 
 @app.on_event("startup")
