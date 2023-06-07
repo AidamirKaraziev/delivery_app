@@ -44,15 +44,5 @@ class CrudSellingPointType(CRUDBase[SellingPointType, SellingPointTypeCreate, Se
                                                   obj_new=update_data)
         return updated_selling_point_type, 0, None
 
-    async def delete_selling_point_type(self, *, db: AsyncSession, selling_point_type_id: int):
-        # check id
-        query = select(self.model).where(self.model.id == selling_point_type_id)
-        response = await db.execute(query)
-        current_selling_point_type = response.scalar_one_or_none()
-        if current_selling_point_type is None:
-            return None, -3, None
-        deleted_selling_point_type = await self.delete(db=db, id=selling_point_type_id)
-        return deleted_selling_point_type, 0, None
-
 
 crud_selling_point_type = CrudSellingPointType(SellingPointType)

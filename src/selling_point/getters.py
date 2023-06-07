@@ -34,4 +34,5 @@ def getting_selling_point(selling_point: SellingPointGet) -> Optional[SellingPoi
         selling_point_type_id=selling_point_type_data,
         address=selling_point.address,
         client_id=user_data,
+        is_active=selling_point.is_active
     )

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, MetaData
+from sqlalchemy import Column, Integer, String, MetaData, Boolean
 from database import Base
 
 metadata = MetaData()
@@ -11,3 +11,4 @@ class SellingPointType(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     photo = Column(String, nullable=True)
+    is_active = Column(Boolean, default=True, nullable=False)
