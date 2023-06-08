@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Dict, Any
 
 from fastapi import Depends, Request
 from fastapi_users import BaseUserManager, IntegerIDMixin, exceptions, models, schemas
@@ -15,6 +15,28 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
 
     async def on_after_register(self, user: User, request: Optional[Request] = None):
         print(f"User {user.id} has registered.")
+
+    async def on_after_forgot_password(
+            self, user: User, token: str, request: Optional[Request] = None
+    ):
+        print("напишу тут гадости")
+        print(f"User {user.id} has forgot their password. Reset token: {token}")
+
+    async def on_after_reset_password(self, user: User, request: Optional[Request] = None):
+        print(f"User {user.id} has reset their password.")
+
+    async def on_after_update(
+        self,
+        user: User,
+        update_dict: Dict[str, Any],
+        request: Optional[Request] = None,
+    ):
+        print(f"User {user.id} has been updated with {update_dict}.")
+
+    async def on_after_request_verify(
+            self, user: User, token: str, request: Optional[Request] = None
+    ):
+        print(f"Verification requested for user {user.id}. Verification token: {token}")
 
     async def create(
         self,
