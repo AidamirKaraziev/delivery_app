@@ -11,6 +11,7 @@ class SellingPointGet(BaseModel):
     type: Optional[SellingPointTypeGet] = None
     address: str
     client_id: Optional[UserRead]
+    is_active: bool
 
 
 class SellingPointCreate(BaseModel):
@@ -20,6 +21,7 @@ class SellingPointCreate(BaseModel):
     type: Optional[int] = None
     address: str
     client_id: int
+    is_active: Optional[bool] = True
 
 
 class SellingPointUpdate(BaseModel):
@@ -29,4 +31,4 @@ class SellingPointUpdate(BaseModel):
     type: Optional[int] = None
     address: str
     client_id: int
-
+    is_active: bool

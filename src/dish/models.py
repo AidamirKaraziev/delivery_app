@@ -26,3 +26,5 @@ class Dish(Base):
     visible = Column(Boolean, nullable=False)
 
     promo = relationship("Promo", backref="dishes", lazy="joined")
+
+    is_active = Column(Boolean, default=True, nullable=False)

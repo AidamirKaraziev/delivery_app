@@ -100,22 +100,5 @@ async def update_sp_type(
     return SingleEntityResponse(data=getting_selling_point_type(selling_point_type=sp_type))
 
 
-@router.delete(
-    path='/{sp_type_id}',
-    response_model=SingleEntityResponse,
-    name='delete_sp_type',
-    description='Удалить тип точек сбыта'
-)
-async def delete_sp_type(
-        sp_type_id: int,
-        session: AsyncSession = Depends(get_async_session)
-):
-    sp_type, code, indexes = await crud_sp_types.delete_selling_point_type(db=session,
-                                                                           selling_point_type_id=sp_type_id)
-    if code != 0:
-        raise HTTPException(status_code=404, detail="Resource with this ID does not exist")
-    return SingleEntityResponse(data=getting_selling_point_type(selling_point_type=sp_type))
-
-
 if __name__ == "__main__":
     logging.info('Running...')

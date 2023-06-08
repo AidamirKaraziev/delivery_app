@@ -17,6 +17,7 @@ class DishGet(BaseModel):
     price: float
 
     promo_id: Optional[PromoGet] = None
+    is_active: bool
     visible: Optional[bool] = True
 
 
@@ -33,6 +34,7 @@ class DishCreate(BaseModel):
     price: float
 
     promo_id: Optional[int] = None
+    is_active: Optional[bool] = True
     visible: Optional[bool] = True
 
 
@@ -48,5 +50,6 @@ class DishUpdate(BaseModel):
     price: float
 
     promo_id: Optional[int] = None
+    is_active: bool
     visible: Optional[bool] = True
 

@@ -97,22 +97,5 @@ async def update_selling_point(
     return SingleEntityResponse(data=getting_selling_point(selling_point=selling_point))
 
 
-@router.delete(
-    path='/{selling_point_id}',
-    response_model=SingleEntityResponse,
-    name='delete_selling_point',
-    description='Удалить точку сбыта'
-)
-async def delete_selling_point(
-        selling_point_id: int,
-        session: AsyncSession = Depends(get_async_session)
-):
-    selling_point, code, indexes = await crud_selling_point.delete_selling_point(db=session,
-                                                                                 selling_point_id=selling_point_id)
-    if code != 0:
-        raise HTTPException(status_code=404, detail="Resource with this ID does not exist")
-    return SingleEntityResponse(data=getting_selling_point(selling_point=selling_point))
-
-
 if __name__ == "__main__":
     logging.info('Running...')

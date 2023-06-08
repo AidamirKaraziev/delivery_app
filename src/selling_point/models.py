@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, MetaData
+from sqlalchemy import Column, Integer, String, ForeignKey, MetaData, Boolean
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -21,6 +21,7 @@ class SellingPoint(Base):
 
     address = Column(String, nullable=False)
     client_id = Column(Integer, ForeignKey(User.id, ondelete="SET NULL"))
+    is_active = Column(Boolean, default=True, nullable=False)
 
     user = relationship(User, backref="users", lazy="joined")
     type = relationship(SellingPointType, backref="selling_point_types", lazy="joined")

@@ -93,21 +93,5 @@ async def update_dish(
     return SingleEntityResponse(data=getting_dish(obj=dish))
 
 
-@router.delete(
-    path='/{dish_id}',
-    response_model=SingleEntityResponse,
-    name='delete_dish',
-    description='Удаление блюда'
-)
-async def delete_dish(
-        dish_id: int,
-        session: AsyncSession = Depends(get_async_session)
-):
-    obj, code, indexes = await crud_dish.delete_dish(db=session, dish_id=dish_id)
-    if code != 0:
-        raise HTTPException(status_code=404, detail="Resource with this ID does not exist")
-    return SingleEntityResponse(data=getting_dish(obj=obj))
-
-
 if __name__ == "__main__":
     logging.info('Running...')

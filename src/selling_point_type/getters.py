@@ -7,5 +7,6 @@ def getting_selling_point_type(selling_point_type: SellingPointTypeGet) -> Optio
     return SellingPointTypeGet(
         id=selling_point_type.id,
         name=selling_point_type.name,
-        photo=selling_point_type.photo
+        photo=selling_point_type.photo,
+        is_active=selling_point_type.is_active
     )

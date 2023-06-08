@@ -38,15 +38,5 @@ class CrudSellingPoint(CRUDBase[SellingPoint, SellingPointCreate, SellingPointUp
         updated_selling_point = await self.update(db_session=db, obj_current=current_selling_point, obj_new=update_data)
         return updated_selling_point, 0, None
 
-    async def delete_selling_point(self, *, db: AsyncSession, selling_point_id: int):
-        # check id
-        query = select(self.model).where(self.model.id == selling_point_id)
-        response = await db.execute(query)
-        current_selling_point = response.scalar_one_or_none()
-        if current_selling_point is None:
-            return None, -3, None
-        deleted_selling_point = await self.delete(db=db, id=selling_point_id)
-        return deleted_selling_point, 0, None
-
 
 crud_selling_point = CrudSellingPoint(SellingPoint)

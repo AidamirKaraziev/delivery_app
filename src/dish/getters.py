@@ -25,5 +25,6 @@ def getting_dish(obj: DishGet) -> Optional[DishGet]:
         price=obj.price,
 
         promo_id=promo_data,
+        is_active=obj.is_active,
         visible=obj.visible,
     )

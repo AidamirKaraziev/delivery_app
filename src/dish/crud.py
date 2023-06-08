@@ -38,15 +38,5 @@ class CrudDish(CRUDBase[Dish, DishCreate, DishUpdate]):
         objects = await self.update(db_session=db, obj_current=current_obj, obj_new=update_data)
         return objects, 0, None
 
-    async def delete_dish(self, *, db: AsyncSession, dish_id: int):
-        # check id
-        query = select(self.model).where(self.model.id == dish_id)
-        response = await db.execute(query)
-        current_obj = response.scalar_one_or_none()
-        if current_obj is None:
-            return None, -3, None
-        obj = await self.delete(db=db, id=dish_id)
-        return obj, 0, None
-
 
 crud_dish = CrudDish(Dish)
