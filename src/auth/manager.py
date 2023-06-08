@@ -7,6 +7,7 @@ from auth.models import User
 from auth.utils import get_user_db
 
 from config import SECRET_AUTH
+from tasks.tasks import send_email_report_forgot_password
 
 
 class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
@@ -19,7 +20,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
     async def on_after_forgot_password(
             self, user: User, token: str, request: Optional[Request] = None
     ):
-        print("напишу тут гадости")
+        send_email_report_forgot_password.delay(name=user.name, email_to=user.email, token=token)
         print(f"User {user.id} has forgot their password. Reset token: {token}")
 
     async def on_after_reset_password(self, user: User, request: Optional[Request] = None):
