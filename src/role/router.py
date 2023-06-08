@@ -19,9 +19,10 @@ router = APIRouter(
 )
 
 
-@router.get('/all',
+@router.get(
+            path="/all",
             response_model=ListOfEntityResponse,
-            name='Список ролей',
+            name='get_roles',
             description='Получение списка всех ролей'
             )
 async def get_roles(
@@ -34,8 +35,11 @@ async def get_roles(
     return ListOfEntityResponse(data=[getting_role(obj) for obj in objects])
 
 
-@router.get("/",
-            response_model=SingleEntityResponse
+@router.get(
+            path="/{role_id}",
+            response_model=SingleEntityResponse,
+            name="get_role",
+            description='Вывод ролей по идентификатору'
             )
 async def get_role(
         role_id: int,

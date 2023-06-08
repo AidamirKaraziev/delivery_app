@@ -3,11 +3,16 @@ import logging
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from auth.base_config import fastapi_users
+from auth.models import User
 from core.response import SingleEntityResponse, ListOfEntityResponse
 from database import get_async_session
 from selling_point.crud import crud_selling_point
 from selling_point.getters import getting_selling_point
 from selling_point.schemas import SellingPointCreate, SellingPointUpdate
+
+current_active_superuser = fastapi_users.current_user(active=True, superuser=True)
+current_active_user = fastapi_users.current_user(active=True)
 
 
 router = APIRouter(
@@ -25,6 +30,7 @@ router = APIRouter(
 async def get_selling_points(
         limit: int = 100,
         skip: int = 0,
+        user: User = Depends(current_active_user),
         session: AsyncSession = Depends(get_async_session),
 ):
     selling_points, code, indexes = await crud_selling_point.get_all_selling_points(db=session, skip=skip, limit=limit)
@@ -40,6 +46,7 @@ async def get_selling_points(
 )
 async def get_selling_point_by_id(
         selling_point_id: int,
+        user: User = Depends(current_active_user),
         session: AsyncSession = Depends(get_async_session),
 ):
     selling_point, code, indexes = await crud_selling_point.get_selling_point_by_id(db=session,
@@ -58,8 +65,10 @@ async def get_selling_point_by_id(
 )
 async def create_selling_point(
         new_data: SellingPointCreate,
+        user: User = Depends(current_active_user),
         session: AsyncSession = Depends(get_async_session),
 ):
+
     selling_point, code, indexes = await crud_selling_point.create_selling_point(db=session, new_data=new_data)
     # ошибки обработать
     if code != 0:
@@ -76,6 +85,7 @@ async def create_selling_point(
 async def update_selling_point(
         update_data: SellingPointUpdate,
         selling_point_id: int,
+        user: User = Depends(current_active_user),
         session: AsyncSession = Depends(get_async_session),
 ):
     selling_point, code, indexes = await crud_selling_point.update_selling_point(db=session,

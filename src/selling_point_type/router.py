@@ -3,11 +3,16 @@ import logging
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from auth.base_config import fastapi_users
+from auth.models import User
 from core.response import SingleEntityResponse, ListOfEntityResponse
 from database import get_async_session
 from selling_point_type.crud import crud_selling_point_type as crud_sp_types
 from selling_point_type.getters import getting_selling_point_type
 from selling_point_type.schemas import SellingPointTypeCreate, SellingPointTypeUpdate
+
+current_active_superuser = fastapi_users.current_user(active=True, superuser=True)
+current_active_user = fastapi_users.current_user(active=True)
 
 router = APIRouter(
     prefix="/sp_type",
@@ -24,6 +29,7 @@ router = APIRouter(
 async def get_sp_types(
         limit: int = 100,
         skip: int = 0,
+        user: User = Depends(current_active_user),
         session: AsyncSession = Depends(get_async_session),
 ):
     sp_types, code, indexes = await crud_sp_types.get_all_selling_point_types(db=session,
@@ -42,6 +48,7 @@ async def get_sp_types(
 )
 async def get_sp_type_by_id(
         sp_type_id: int,
+        user: User = Depends(current_active_user),
         session: AsyncSession = Depends(get_async_session),
 ):
     sp_type, code, indexes = await crud_sp_types.get_selling_point_type_by_id(db=session,
@@ -60,6 +67,7 @@ async def get_sp_type_by_id(
 )
 async def create_selling_point_type(
         new_data: SellingPointTypeCreate,
+        user: User = Depends(current_active_superuser),
         session: AsyncSession = Depends(get_async_session),
 ):
     sp_type, code, indexes = await crud_sp_types.create_selling_point_type(db=session, new_data=new_data)
@@ -78,6 +86,7 @@ async def create_selling_point_type(
 async def update_sp_type(
         update_data: SellingPointTypeUpdate,
         sp_type_id: int,
+        user: User = Depends(current_active_superuser),
         session: AsyncSession = Depends(get_async_session),
 ):
     sp_type, code, indexes = await crud_sp_types.update_selling_point_type(
