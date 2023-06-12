@@ -12,7 +12,7 @@ class CrudSellingPointType(CRUDBase[SellingPointType, SellingPointTypeCreate, Se
     async def get_selling_point_type_by_id(self, *, db: AsyncSession, selling_point_type_id: int):
         selling_point_type = await self.get(db=db, id=selling_point_type_id)
         if selling_point_type is None:
-            return None, -2, None
+            return None, "Not found selling point type with this id", None
         return selling_point_type, 0, None
 
     async def get_all_selling_point_types(self, *, db: AsyncSession, skip: int, limit: int):

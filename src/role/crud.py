@@ -9,7 +9,7 @@ class CrudRole(CRUDBase[Role, RoleCreate, RoleUpdate]):
     async def get_role_by_id(self, *, db: AsyncSession, role_id: int):
         obj = await super().get(db=db, id=role_id)
         if obj is None:
-            return None, -1, None
+            return None, "Not found role with this id", None
         return obj, 0, None
 
     async def get_all_role(self, *, db: AsyncSession, skip: int, limit: int):
