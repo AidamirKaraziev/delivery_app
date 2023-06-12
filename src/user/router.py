@@ -80,6 +80,7 @@ async def get_users(
 async def create_admin(
     request: Request,
     user_create: UserCreate,  # type: ignore
+    user: User = Depends(current_active_superuser),
     user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
 ):
     try:
