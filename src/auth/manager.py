@@ -7,7 +7,7 @@ from auth.models import User
 from auth.utils import get_user_db
 
 from config import SECRET_AUTH
-from tasks.tasks import send_email_report_forgot_password
+from tasks.tasks import send_email_report_forgot_password, send_email_request_verify
 
 
 class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
@@ -37,6 +37,8 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
     async def on_after_request_verify(
             self, user: User, token: str, request: Optional[Request] = None
     ):
+        print(",kffffff")
+        send_email_request_verify.delay(name=user.name, email_to=user.email, token=token)
         print(f"Verification requested for user {user.id}. Verification token: {token}")
 
     async def create(
