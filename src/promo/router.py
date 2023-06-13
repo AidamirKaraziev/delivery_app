@@ -54,7 +54,7 @@ async def get_promo(
     return SingleEntityResponse(data=getting_promo(obj=obj))
 
 
-@router.post(path="/{promo_id}",
+@router.post(path="/",
              response_model=SingleEntityResponse,
              name='create_promo',
              description='Создать рекламируемую группу'

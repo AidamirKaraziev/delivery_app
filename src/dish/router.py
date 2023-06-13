@@ -50,8 +50,8 @@ async def get_dish_by_id(
     dish, code, indexes = await crud_dish.get_dish_by_id(db=session, dish_id=dish_id)
     # ошибки обработать
     if code != 0:
-        raise HTTPException(status_code=404, detail="Resource with this ID does not exist")
-    return SingleEntityResponse(data=getting_dish(obj=dish))
+        return SingleEntityResponse(data=f"ERROR: {code}")
+    return SingleEntityResponse(data=getting_dish(obj=obj))
 
 
 @router.post(
@@ -65,11 +65,11 @@ async def create_dish(
         user: User = Depends(current_active_superuser),
         session: AsyncSession = Depends(get_async_session),
 ):
-    obj, code, indexes = await crud_dish.create_dish(db=session, new_data=new_data)
+    dish, code, indexes = await crud_dish.create_dish(db=session, new_data=new_data)
     # ошибки обработать
     if code != 0:
-        raise HTTPException(status_code=409, detail="Resource already exists")
-    return SingleEntityResponse(data=getting_dish(obj=obj))
+        return SingleEntityResponse(data=f"ERROR: {code}")
+    return SingleEntityResponse(data=getting_dish(obj=dish))
 
 
 @router.put(
@@ -89,7 +89,7 @@ async def update_dish(
                                                       dish_id=dish_id)
     # ошибки обработать
     if code != 0:
-        raise HTTPException(status_code=404, detail="Resource with this ID does not exist")
+        return SingleEntityResponse(data=f"ERROR: {code}")
     return SingleEntityResponse(data=getting_dish(obj=dish))
 
 

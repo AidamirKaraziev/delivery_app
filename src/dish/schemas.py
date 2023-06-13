@@ -17,13 +17,12 @@ class DishGet(BaseModel):
     price: float
 
     promo_id: Optional[PromoGet] = None
-    is_active: bool
+    is_active: Optional[bool] = True
     visible: Optional[bool] = True
 
 
 class DishCreate(BaseModel):
-    id: int
-    name: str
+    name: str = Field(..., title="Наименование блюда")
 
     main_photo: str
     photo1: str
