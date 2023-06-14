@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends
+from fastapi.staticfiles import StaticFiles
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 
@@ -56,6 +57,7 @@ app.include_router(router_promo)
 app.include_router(router_dish)
 app.include_router(router_selling_point)
 app.include_router(router_sp_type)
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @app.on_event("startup")
