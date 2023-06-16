@@ -21,10 +21,10 @@ class CrudSellingPointType(CRUDBase[SellingPointType, SellingPointTypeCreate, Se
 
     async def create_selling_point_type(self, *, db: AsyncSession, new_data: SellingPointTypeCreate):
         # check by id
-        query = select(self.model).where(self.model.id == new_data.id)
+        query = select(self.model).where(self.model.name == new_data.name)
         response = await db.execute(query)
         if response.scalar_one_or_none() is not None:
-            return None, -3, None
+            return None, "А selling point type with that name already exists", None
         new_selling_point_type = await self.create(db_session=db, obj_in=new_data)
         return new_selling_point_type, 0, None
 
@@ -38,10 +38,15 @@ class CrudSellingPointType(CRUDBase[SellingPointType, SellingPointTypeCreate, Se
         response = await db.execute(query)
         current_selling_point_type = response.scalar_one_or_none()
         if current_selling_point_type is None:
-            return None, -3, None
+            return None, "Not found selling point type with this id", None
         updated_selling_point_type = await self.update(db_session=db,
-                                                  obj_current=current_selling_point_type,
-                                                  obj_new=update_data)
+                                                       obj_current=current_selling_point_type,
+                                                       obj_new=update_data)
+        # check name
+        query = select(self.model).where(self.model.name == update_data.name)
+        response = await db.execute(query)
+        if response.scalar_one_or_none() is not None:
+            return None, "А selling point type with that name already exists", None
         return updated_selling_point_type, 0, None
 
 
