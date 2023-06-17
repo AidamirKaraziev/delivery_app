@@ -3,9 +3,9 @@ from pydantic import BaseModel
 
 
 class SellingPointTypeGet(BaseModel):
-    id: int
-    name: str
-    photo: str
+    id: Optional[int]
+    name: Optional[str]
+    photo: Optional[str]
     is_active: bool
 
 

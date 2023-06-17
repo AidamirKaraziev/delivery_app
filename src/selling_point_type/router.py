@@ -21,7 +21,7 @@ router = APIRouter(
 
 
 @router.get(
-    path='/sp_types',
+    path='/all',
     response_model=ListOfEntityResponse,
     name='get_sp_types',
     description='Получение списка типов точек сбыта'
@@ -36,8 +36,9 @@ async def get_sp_types(
                                                                               skip=skip,
                                                                               limit=limit)
 
-    return ListOfEntityResponse(
-        data=[getting_selling_point_type(sp_type) for sp_type in sp_types])
+    # return ListOfEntityResponse(
+    #     data=[getting_selling_point_type(sp_type) for sp_type in sp_types])
+    return ListOfEntityResponse(data=[getting_selling_point_type(obj) for obj in sp_types])
 
 
 @router.get(
