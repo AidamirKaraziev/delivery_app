@@ -1,38 +1,25 @@
 from typing import Optional
+from fastapi import Request
+
+
 from selling_point.schemas import SellingPointGet
-from auth.schemas import UserRead
-from selling_point_type.schemas import SellingPointTypeGet
+from selling_point_type.getters import getting_selling_point_type
+from user.getters import getting_user
 
 
-def getting_selling_point(selling_point: SellingPointGet) -> Optional[SellingPointGet]:
-
-    user_data = None
-    if selling_point.user:
-        user_data = {
-            'id': selling_point.user.id,
-            'name': selling_point.user.name,
-            'photo': selling_point.user.photo,
-            'email': selling_point.user.email,
-            'phone_number': selling_point.user.phone_number,
-            'role_id': selling_point.user.role_id,
-            'is_active': selling_point.user.is_active,
-            'is_superuser': selling_point.user.is_superuser,
-            'is_verified': selling_point.user.is_verified
-        }
-
-    selling_point_type_data = None
-    if selling_point.type:
-        selling_point_type_data = {
-            'id': selling_point.type.id,
-            'name': selling_point.type.name
-        }
-
+def getting_selling_point(obj: SellingPointGet, request: Optional[Request]) -> Optional[SellingPointGet]:
+    if request is not None:
+        url = request.url.hostname + ":8000" + "/static/"
+        if obj.photo is not None:
+            obj.photo = url + str(obj.photo)
+        else:
+            obj.photo = None
     return SellingPointGet(
-        id=selling_point.id,
-        name=selling_point.name,
-        photo=selling_point.photo,
-        selling_point_type_id=selling_point_type_data,
-        address=selling_point.address,
-        client_id=user_data,
-        is_active=selling_point.is_active
+        id=obj.id,
+        name=obj.name,
+        photo=obj.photo,
+        selling_point_type_id=getting_selling_point_type(obj.type) if obj.type is not None else None,
+        address=obj.address,
+        client_id=getting_user(obj=obj.user, request=request) if obj.user is not None else None,
+        is_active=obj.is_active
     )

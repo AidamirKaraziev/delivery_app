@@ -1,34 +1,29 @@
 from typing import Optional
 from pydantic import BaseModel
-from auth.schemas import UserRead
+from auth.schemas import UserGet
 from selling_point_type.schemas import SellingPointTypeGet
 
 
 class SellingPointGet(BaseModel):
     id: int
     name: str
-    photo: str
-    type: Optional[SellingPointTypeGet] = None
+    photo: Optional[str]
+    selling_point_type_id: Optional[SellingPointTypeGet]
     address: str
-    client_id: Optional[UserRead]
-    is_active: bool
+    client_id: Optional[UserGet]
+    is_active: Optional[bool]
 
 
 class SellingPointCreate(BaseModel):
-    id: int
     name: str
-    photo: str
-    type: Optional[int] = None
+    selling_point_type_id: Optional[int]
     address: str
-    client_id: int
+    client_id: Optional[int]
     is_active: Optional[bool] = True
 
 
 class SellingPointUpdate(BaseModel):
-    id: int
-    name: str
-    photo: str
-    type: Optional[int] = None
-    address: str
-    client_id: int
-    is_active: bool
+    name: Optional[str]
+    selling_point_type_id: Optional[int]
+    address: Optional[str]
+    is_active: Optional[bool]

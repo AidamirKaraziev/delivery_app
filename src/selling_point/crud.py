@@ -43,5 +43,9 @@ class CrudSellingPoint(CRUDBase[SellingPoint, SellingPointCreate, SellingPointUp
         updated_selling_point = await self.update(db_session=db, obj_current=current_selling_point, obj_new=update_data)
         return updated_selling_point, 0, None
 
+    async def check_name(self, *, witch_name: str):
+        if witch_name not in ["photo"]:
+            return f"Incorrect witch photo name '{witch_name}'!"
+
 
 crud_selling_point = CrudSellingPoint(SellingPoint)
