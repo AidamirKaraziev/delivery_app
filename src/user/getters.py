@@ -7,7 +7,7 @@ from role.getters import getting_role
 
 def getting_user(obj: UserGet,  request: Optional[Request]) -> Optional[UserGet]:
     if request is not None:
-        url = request.url.hostname + ":8000" +"/static/"
+        url = request.url.hostname + ":8000" + "/static/"
         if obj.photo is not None:
             obj.photo = url + str(obj.photo)
         else:

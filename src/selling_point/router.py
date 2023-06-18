@@ -101,7 +101,7 @@ async def update_selling_point(
     return SingleEntityResponse(data=getting_selling_point(obj=selling_point, request=request))
 
 
-@router.put("/me/add-file/",
+@router.put("/add-file/",
             response_model=SingleEntityResponse,
             name='add_file',
             description='Добавить фото'

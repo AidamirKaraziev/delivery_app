@@ -28,7 +28,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_DIR = os.path.join(BASE_DIR, "upload")
 
 timestr = time.strftime("%Y%m%d-%H%M%S")
-
+BASE_PATH = "./static/"
 PATH_MODEL = "user"
 PATH_PHOTO = "photo"
 
@@ -163,7 +163,7 @@ async def add_photo(
         ):
     save_path = await crud_user.adding_file(
         db=session, file=file, path_model=PATH_MODEL,
-        path_type=PATH_PHOTO, db_obj=user, base_path="./static/")
+        path_type=PATH_PHOTO, db_obj=user, base_path=BASE_PATH)
     if not save_path:
         return HTTPException(status_code=400, detail=f"Not have save photo")
     return SingleEntityResponse(data=getting_user(user, request=request))

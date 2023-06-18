@@ -48,7 +48,6 @@ async def get_promo(
         session: AsyncSession = Depends(get_async_session),
 ):
     obj, code, indexes = await crud_promo.get_promo_by_id(db=session, promo_id=promo_id)
-    # ошибки обработать
     if code != 0:
         return SingleEntityResponse(data=f"ERROR: {code}")
     return SingleEntityResponse(data=getting_promo(obj=obj))
@@ -65,7 +64,6 @@ async def create_promo(
         session: AsyncSession = Depends(get_async_session),
 ):
     obj, code, indexes = await crud_promo.create_promo(db=session, new_data=new_data)
-    # ошибки обработать
     if code != 0:
         return SingleEntityResponse(data=f"ERROR: {code}")
     return SingleEntityResponse(data=getting_promo(obj=obj))
@@ -82,13 +80,11 @@ async def update_promo(
         user: User = Depends(current_active_superuser),
         session: AsyncSession = Depends(get_async_session),
 ):
-
     obj, code, indexes = await crud_promo.update_promo(db=session,
                                                        update_data=update_data,
                                                        promo_id=promo_id)
-    # ошибки обработать
     if code != 0:
-        return SingleEntityResponse(data=f"ERROR: {code}")
+        raise HTTPException(status_code=400, detail=code)
     return SingleEntityResponse(data=getting_promo(obj=obj))
 
 

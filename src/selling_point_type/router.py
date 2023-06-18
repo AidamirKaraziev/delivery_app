@@ -35,9 +35,6 @@ async def get_sp_types(
     sp_types, code, indexes = await crud_sp_types.get_all_selling_point_types(db=session,
                                                                               skip=skip,
                                                                               limit=limit)
-
-    # return ListOfEntityResponse(
-    #     data=[getting_selling_point_type(sp_type) for sp_type in sp_types])
     return ListOfEntityResponse(data=[getting_selling_point_type(obj) for obj in sp_types])
 
 
@@ -72,7 +69,6 @@ async def create_selling_point_type(
         session: AsyncSession = Depends(get_async_session),
 ):
     sp_type, code, indexes = await crud_sp_types.create_selling_point_type(db=session, new_data=new_data)
-    # ошибки обработать
     if code != 0:
         raise HTTPException(status_code=409, detail="Resource already exists")
     return SingleEntityResponse(data=getting_selling_point_type(sp_type))
@@ -95,10 +91,9 @@ async def update_sp_type(
         update_data=update_data,
         selling_point_type_id=sp_type_id
     )
-    # ошибки обработать
     if code != 0:
         raise HTTPException(status_code=404, detail="Resource with this ID does not exist")
-    return SingleEntityResponse(data=getting_selling_point_type(selling_point_type=sp_type))
+    return SingleEntityResponse(data=getting_selling_point_type(sp_type))
 
 
 if __name__ == "__main__":

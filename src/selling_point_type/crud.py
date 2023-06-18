@@ -39,14 +39,15 @@ class CrudSellingPointType(CRUDBase[SellingPointType, SellingPointTypeCreate, Se
         current_selling_point_type = response.scalar_one_or_none()
         if current_selling_point_type is None:
             return None, "Not found selling point type with this id", None
+        # check name
+        if update_data.name is not None:
+            query = select(self.model).where(self.model.name == update_data.name, self.model.id != selling_point_type_id)
+            response = await db.execute(query)
+            if response.scalar_one_or_none() is not None:
+                return None, "А selling point type with that name already exists", None
         updated_selling_point_type = await self.update(db_session=db,
                                                        obj_current=current_selling_point_type,
                                                        obj_new=update_data)
-        # check name
-        query = select(self.model).where(self.model.name == update_data.name)
-        response = await db.execute(query)
-        if response.scalar_one_or_none() is not None:
-            return None, "А selling point type with that name already exists", None
         return updated_selling_point_type, 0, None
 
 

@@ -36,10 +36,11 @@ class CrudSellingPoint(CRUDBase[SellingPoint, SellingPointCreate, SellingPointUp
         if current_selling_point is None:
             return None, "Not found selling point with this id", None
         # check name
-        query = select(self.model).where(self.model.name == update_data.name)
-        response = await db.execute(query)
-        if response.scalar_one_or_none() is not None:
-            return None, "А selling point with that name already exists", None
+        if update_data.name is not None:
+            query = select(self.model).where(self.model.name == update_data.name, self.model.id != selling_point_id)
+            response = await db.execute(query)
+            if response.scalar_one_or_none() is not None:
+                return None, "А selling point with that name already exists", None
         updated_selling_point = await self.update(db_session=db, obj_current=current_selling_point, obj_new=update_data)
         return updated_selling_point, 0, None
 

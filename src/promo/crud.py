@@ -36,10 +36,11 @@ class CrudPromo(CRUDBase[Promo, PromoCreate, PromoUpdate]):
         if this_obj is None:
             return None, "Not found promo with this id", None  # not_found
         # check name
-        query = select(self.model).where(self.model.name == update_data.name)
-        response = await db.execute(query)
-        if response.scalar_one_or_none() is not None:
-            return None, "А promo with that name already exists", None
+        if update_data.name is not None:
+            query = select(self.model).where(self.model.name == update_data.name, self.model.id != promo_id)
+            response = await db.execute(query)
+            if response.scalar_one_or_none() is not None:
+                return None, "А promo with that name already exists", None
         objects = await super().update(db_session=db, obj_current=this_obj, obj_new=update_data)
         return objects, 0, None
 
