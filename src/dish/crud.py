@@ -5,6 +5,7 @@ from dish.models import Dish
 from dish.schemas import DishCreate, DishUpdate
 
 from core.base_crud import CRUDBase
+from promo.models import Promo
 
 
 class CrudDish(CRUDBase[Dish, DishCreate, DishUpdate]):
@@ -25,6 +26,12 @@ class CrudDish(CRUDBase[Dish, DishCreate, DishUpdate]):
         response = await db.execute(query)
         if response.scalar_one_or_none() is not None:
             return None, "А dish with that name already exists", None
+        # check promo id
+        if new_data.promo_id is not None:
+            query = select(Promo).where(Promo.id == new_data.promo_id)
+            response = await db.execute(query)
+            if response.scalar_one_or_none() is None:
+                return None, "Not found promo with this id", None
         objects = await self.create(db_session=db, obj_in=new_data)
         return objects, 0, None
 
@@ -36,12 +43,22 @@ class CrudDish(CRUDBase[Dish, DishCreate, DishUpdate]):
         if current_obj is None:
             return None, "Not found dish with this id", None
         # check name
-        query = select(self.model).where(self.model.name == update_data.name)
-        response = await db.execute(query)
-        if response.scalar_one_or_none() is not None:
-            return None, "А dish with that name already exists", None
+        if update_data.name is not None:
+            query = select(self.model).where(self.model.name == update_data.name, self.model.id != dish_id)
+            response = await db.execute(query)
+            if response.scalar_one_or_none() is not None:
+                return None, "А dish with that name already exists", None
+        if update_data.promo_id is not None:
+            query = select(Promo).where(Promo.id == update_data.promo_id)
+            response = await db.execute(query)
+            if response.scalar_one_or_none() is None:
+                return None, "Not found promo with this id", None
         objects = await self.update(db_session=db, obj_current=current_obj, obj_new=update_data)
         return objects, 0, None
+
+    async def check_name(self, *, witch_name: str):
+        if witch_name not in ["main_photo", "photo_1", "photo_2"]:
+            return f"Incorrect witch photo name '{witch_name}'!"
 
 
 crud_dish = CrudDish(Dish)
