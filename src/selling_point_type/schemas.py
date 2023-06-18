@@ -10,7 +10,6 @@ class SellingPointTypeGet(BaseModel):
 
 
 class SellingPointTypeCreate(BaseModel):
-    id: int
     name: str
     photo: str
     is_active: Optional[bool] = True
