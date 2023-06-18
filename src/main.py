@@ -1,11 +1,12 @@
 from fastapi import FastAPI, Depends
+from fastapi.staticfiles import StaticFiles
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 
 from redis import asyncio as aioredis
 from auth.base_config import auth_backend, fastapi_users
 from auth.models import User
-from auth.schemas import UserRead, UserCreate
+from auth.schemas import UserRead, UserCreate, UserUpdate
 
 from role.router import router as router_role
 from promo.router import router as router_promo
@@ -33,6 +34,18 @@ app.include_router(
     tags=["Auth"],
 )
 
+app.include_router(router_user)
+app.include_router(
+    fastapi_users.get_users_router(UserRead, UserUpdate),
+    prefix="/users",
+    tags=["users"],
+)
+
+app.include_router(
+    fastapi_users.get_verify_router(UserRead),
+    prefix="/auth",
+    tags=["auth"],
+)
 # сброс пароля
 app.include_router(
     fastapi_users.get_reset_password_router(),
@@ -45,7 +58,7 @@ app.include_router(router_promo)
 app.include_router(router_dish)
 app.include_router(router_selling_point)
 app.include_router(router_sp_type)
-app.include_router(router_user)
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @app.on_event("startup")

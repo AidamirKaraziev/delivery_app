@@ -1,54 +1,45 @@
-from typing import Optional, Union
+from typing import Optional
 from pydantic import BaseModel, Field
 from promo.schemas import PromoGet
 
 
 class DishGet(BaseModel):
+    id: Optional[int]
+    name: Optional[str]
 
-    id: int
-    name: str
+    main_photo: Optional[str]
+    photo1: Optional[str]
+    photo2: Optional[str]
 
-    main_photo: str
-    photo1: str
-    photo2: str
+    description: Optional[str]
+    composition: Optional[str]
+    price: Optional[int]
 
-    discription: str
-    composition: str
-    price: float
+    promo_id: Optional[PromoGet]
 
-    promo_id: Optional[PromoGet] = None
-    is_active: Optional[bool] = True
-    visible: Optional[bool] = True
+    is_active: Optional[bool]
+
+    visible: Optional[bool]
 
 
 class DishCreate(BaseModel):
-    name: str = Field(..., title="Наименование блюда")
 
-    main_photo: str
-    photo1: str
-    photo2: str
+    name: str
+    description: str
 
-    discription: str
     composition: str
-    price: float
+    price: int
 
-    promo_id: Optional[int] = None
+    promo_id: Optional[int]
     is_active: Optional[bool] = True
-    visible: Optional[bool] = True
+    visible: Optional[bool] = False
 
 
 class DishUpdate(BaseModel):
-    name: str = Field(..., title='Наименование блюда')
-
-    main_photo: str
-    photo1: str
-    photo2: str
-
-    discription: str
-    composition: str
-    price: float
-
-    promo_id: Optional[int] = None
-    is_active: bool
-    visible: Optional[bool] = True
-
+    name: Optional[str]
+    description: Optional[str]
+    composition: Optional[str]
+    price: Optional[int]
+    promo_id: Optional[int]
+    is_active: Optional[bool]
+    visible: Optional[bool]

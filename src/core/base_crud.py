@@ -1,20 +1,19 @@
 from __future__ import annotations
 
-from fastapi import HTTPException
-from typing import Any, Generic, TypeVar
+import glob
+import os
+import shutil
+import uuid
 
-# from app.schemas.common_schema import IOrderEnum
-# from fastapi_pagination.ext.async_sqlalchemy import paginate
-from fastapi_async_sqlalchemy import db
-# from fastapi_async_sqlalchemy.middleware import DBSessionMeta
-# from fastapi_pagination import Params, Page
-from fastapi.encoders import jsonable_encoder
+from typing import Any, Generic, TypeVar, Optional
 from pydantic import BaseModel
-# from sqlmodel import SQLModel, select, func
+from fastapi import HTTPException, UploadFile
+from fastapi_async_sqlalchemy import db
+from fastapi.encoders import jsonable_encoder
 
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import exc, select, delete, update
 
-from sqlalchemy import exc, select, delete
 from database import Base
 
 ModelType = TypeVar("ModelType", bound=Base)
@@ -129,6 +128,46 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             await db_session.commit()
         return obj
 
+    async def adding_file(self, db: AsyncSession, *, file: Optional[UploadFile],
+                          base_path: str, path_model: str, path_type: str, db_obj: ModelType):
+        all_path = base_path + path_model + "/" + str(db_obj.id) + "/" + path_type + "/"
+        if path_type not in db_obj.__dict__.keys():
+            return HTTPException(status_code=400,
+                                 detail=f"Не понял что за ошибка но если она выпадет то будет понятно ")
+        if file is None:
+            # Удаляем все содержимое папки
+            path_to_clear = all_path + "*"
+            for file_to_clear in glob.glob(path_to_clear):
+                os.remove(file_to_clear)
+            #  обновить в базе данных ячейку
+            query = update(self.model).where(self.model.id == db_obj.id).values({path_type: None}).returning(self.model)
+            await db.execute(query)
+            await db.commit()
+            return {path_type: None}
+
+        filename = uuid.uuid4().hex + os.path.splitext(file.filename)[1]
+        element = [path_model, str(db_obj.id), path_type, filename]
+        path_for_db = "/".join(element)
+
+        if not os.path.exists(all_path):
+            os.makedirs(all_path)
+        # Удаляем все содержимое папки
+        path_to_clear = all_path + "*"
+        for file_to_clear in glob.glob(path_to_clear):
+            os.remove(file_to_clear)
+        with open(all_path + filename, "wb") as wf:
+            shutil.copyfileobj(file.file, wf)
+            file.file.close()  # удаляет временный
+        query = update(self.model).where(self.model.id == db_obj.id).values({path_type: path_for_db}).returning(
+            self.model)
+        await db.execute(query)
+        await db.commit()
+
+        if not file:
+            return HTTPException(status_code=400,
+                                 detail=f"Не понял что за ошибка но если она выпадет то будет понятно ")
+        else:
+            return {path_type: path_for_db}
 
     # async def get_count(
     #     self, db_session: AsyncSession | None = None

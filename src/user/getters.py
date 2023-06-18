@@ -1,10 +1,17 @@
 from typing import Optional
+from fastapi import Request
 
 from auth.schemas import UserGet
 from role.getters import getting_role
 
 
-def getting_user(obj: UserGet) -> Optional[UserGet]:
+def getting_user(obj: UserGet,  request: Optional[Request]) -> Optional[UserGet]:
+    if request is not None:
+        url = request.url.hostname + ":8000" + "/static/"
+        if obj.photo is not None:
+            obj.photo = url + str(obj.photo)
+        else:
+            obj.photo = None
     return UserGet(
         id=obj.id,
         name=obj.name,

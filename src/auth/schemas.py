@@ -9,7 +9,7 @@ from role.schemas import RoleGet
 class UserRead(schemas.BaseUser[int]):
     id: int
     name: str
-    photo: str
+    photo: Optional[str]
 
     email: str
     phone_number: str
@@ -26,7 +26,7 @@ class UserRead(schemas.BaseUser[int]):
 class UserCreate(schemas.BaseUserCreate):
     id: int
     name: str
-    photo: str
+    photo: Optional[str]
 
     email: str
     phone_number: str
@@ -39,27 +39,27 @@ class UserCreate(schemas.BaseUserCreate):
 
 
 class UserUpdate(schemas.BaseUserUpdate):
-    id: int
-    name: str
-    photo: str
+    id: Optional[int]
+    name: Optional[str]
+    photo: Optional[str]
 
-    email: str
-    phone_number: str
+    email: Optional[str]
+    phone_number: Optional[str]
 
-    password: str
-    role_id: int
+    password: Optional[str]
+    role_id: Optional[int]
     is_active: Optional[bool] = True
     is_superuser: Optional[bool] = False
     is_verified: Optional[bool] = False
 
 
 class UserGet(schemas.BaseUser[int]):
-    id: int
-    name: str
-    photo: str
+    id: Optional[int]
+    name: Optional[str]
+    photo: Optional[str]
 
-    email: str
-    phone_number: str
+    email: Optional[str]
+    phone_number: Optional[str]
     registered_at: Optional[Date]
 
     role_id: Optional[RoleGet]

@@ -12,7 +12,7 @@ class SellingPoint(Base):
     __tablename__ = "selling_point"
     metadata = metadata
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False)
 
     photo = Column(String, nullable=True)
