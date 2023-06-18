@@ -28,4 +28,4 @@ class User(SQLAlchemyBaseUserTable[int], Base):
     is_superuser: bool = Column(Boolean, default=False, nullable=False)
     is_verified: bool = Column(Boolean, default=False, nullable=False)
 
-    role = relationship(Role, backref="roles", lazy="joined")
+    role = relationship(Role)
