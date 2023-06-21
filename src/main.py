@@ -5,6 +5,7 @@ from fastapi_cache.backends.redis import RedisBackend
 
 from redis import asyncio as aioredis
 from auth.base_config import auth_backend, fastapi_users
+from auth.manager import get_user_manager
 from auth.models import User
 from auth.schemas import UserRead, UserCreate, UserUpdate
 
@@ -13,7 +14,8 @@ from promo.router import router as router_promo
 from dish.router import router as router_dish
 from selling_point.router import router as router_selling_point
 from selling_point_type.router import router as router_sp_type
-from user.router import router as router_user
+
+from user.router import router as router_user, get_users_router
 from core.initial_data import create_initial_data
 
 current_user = fastapi_users.current_user()
@@ -36,7 +38,7 @@ app.include_router(
 
 app.include_router(router_user)
 app.include_router(
-    fastapi_users.get_users_router(UserRead, UserUpdate),
+    get_users_router(user_schema=UserRead, user_update_schema=UserUpdate, get_user_manager=get_user_manager),
     prefix="/users",
     tags=["users"],
 )
@@ -46,7 +48,7 @@ app.include_router(
     prefix="/auth",
     tags=["auth"],
 )
-# сброс пароля
+
 app.include_router(
     fastapi_users.get_reset_password_router(),
     prefix="/auth",

@@ -7,14 +7,14 @@ from role.schemas import RoleGet
 
 
 class UserRead(schemas.BaseUser[int]):
-    id: int
-    name: str
+    id: Optional[int]
+    name: Optional[str]
     photo: Optional[str]
 
-    email: str
-    phone_number: str
-
-    role_id: int
+    email: Optional[str]
+    phone_number: Optional[str]
+    registered_at: Optional[Date]
+    role_id: Optional[RoleGet]
     is_active: bool = True
     is_superuser: bool = False
     is_verified: bool = False
@@ -24,9 +24,8 @@ class UserRead(schemas.BaseUser[int]):
 
 
 class UserCreate(schemas.BaseUserCreate):
-    id: int
+    # id: int
     name: str
-    photo: Optional[str]
 
     email: str
     phone_number: str
@@ -39,20 +38,12 @@ class UserCreate(schemas.BaseUserCreate):
 
 
 class UserUpdate(schemas.BaseUserUpdate):
-    id: Optional[int]
     name: Optional[str]
-    photo: Optional[str]
-
     email: Optional[str]
     phone_number: Optional[str]
 
-    password: Optional[str]
-    role_id: Optional[int]
-    is_active: Optional[bool] = True
-    is_superuser: Optional[bool] = False
-    is_verified: Optional[bool] = False
 
-
+# проверить чтобы нигде не вызывалось - УДАЛИТЬ
 class UserGet(schemas.BaseUser[int]):
     id: Optional[int]
     name: Optional[str]
