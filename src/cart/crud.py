@@ -4,15 +4,17 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from cart.models import Cart
 from cart.schemas import CartCreate, CartUpdate
 
+from dish.models import Dish
+
 from core.base_crud import CRUDBase
 
 
 class CrudCart(CRUDBase[Cart, CartCreate, CartUpdate]):
 
-    async def get_item_cart_by_id(self, *, db: AsyncSession, cart_id: int):
-        obj = await self.get(db=db, id=cart_id)
+    async def get_item_cart_by_id(self, *, db: AsyncSession, item_id: int):
+        obj = await self.get(db=db, id=item_id)
         if obj is None:
-            return None, -2, None
+            return None, "Not found item with this id", None
         return obj, 0, None
 
     async def get_cart_by_id(self, *, db: AsyncSession, cart_id: int):
@@ -21,7 +23,7 @@ class CrudCart(CRUDBase[Cart, CartCreate, CartUpdate]):
         response = await db_session.execute(query)
         objects = response.scalars().all()
         if objects is None:
-            return None, -2, None
+            return None, "Not found cart with this id", None
         return objects, 0, None
 
     async def get_all_carts(self, *, db: AsyncSession, skip: int, limit: int):
@@ -29,11 +31,20 @@ class CrudCart(CRUDBase[Cart, CartCreate, CartUpdate]):
         return objects, 0, None
 
     async def create_item_cart(self, *, db: AsyncSession, new_data: CartCreate):
-        # check id
-        query = select(self.model).where(self.model.id == new_data.item_id)
+
+        # check dish exist
+        query = select(Dish).where(Dish.id == new_data.dish_id)
+        response = await db.execute(query)
+        if response.scalar_one_or_none() is None:
+            return None, "Not found dish with this id", None
+
+        # check dish exist in this cart
+        query = select(self.model).where(self.model.cart_id == new_data.cart_id,
+                                         self.model.dish_id == new_data.dish_id)
         response = await db.execute(query)
         if response.scalar_one_or_none() is not None:
-            return None, -3, None
+            return None, "There is already this dish in this cart", None
+
         objects = await self.create(db_session=db, obj_in=new_data)
         return objects, 0, None
 
@@ -43,7 +54,7 @@ class CrudCart(CRUDBase[Cart, CartCreate, CartUpdate]):
         response = await db.execute(query)
         current_obj = response.scalar_one_or_none()
         if current_obj is None:
-            return None, -3, None
+            return None, "Not found item_cart with this id", None
         objects = await self.update(db_session=db, obj_current=current_obj, obj_new=update_data)
         return objects, 0, None
 

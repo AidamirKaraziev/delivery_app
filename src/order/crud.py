@@ -4,6 +4,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from order.models import Order
 from order.schemas import OrderCreate, OrderUpdate
 
+from selling_point.models import SellingPoint
+from cart.models import Cart
+from status.models import Status
+
 from core.base_crud import CRUDBase
 
 
@@ -12,7 +16,7 @@ class CrudOrder(CRUDBase[Order, OrderCreate, OrderUpdate]):
     async def get_order_by_id(self, *, db: AsyncSession, order_id: int):
         obj = await self.get(db=db, id=order_id)
         if obj is None:
-            return None, -2, None
+            return None, "Not found order with this id", None
         return obj, 0, None
 
     async def get_all_orders(self, *, db: AsyncSession, skip: int, limit: int):
@@ -20,11 +24,24 @@ class CrudOrder(CRUDBase[Order, OrderCreate, OrderUpdate]):
         return objects, 0, None
 
     async def create_order(self, *, db: AsyncSession, new_data: OrderCreate):
-        # check cart_id
-        query = select(self.model).where(self.model.cart_id == new_data.cart_id)
+        # check selling_point
+        if new_data.selling_point_id is not None:
+            query = select(SellingPoint).where(SellingPoint.id == new_data.selling_point_id)
+            response = await db.execute(query)
+            if response.scalar_one_or_none() is None:
+                return None, "Not found selling point with this id", None
+
+        # check cart
+        query = select(Cart).where(Cart.id == new_data.cart_id)
         response = await db.execute(query)
-        if response.scalar_one_or_none() is not None:
-            return None, -3, None
+        if response.scalar_one_or_none() is None:
+            return None, "Not found cart with this id", None
+
+        # check status
+        query = select(Status).where(Status.id == new_data.status_id)
+        response = await db.execute(query)
+        if response.scalar_one_or_none() is None:
+            return None, "Not found status with this id", None
         objects = await self.create(db_session=db, obj_in=new_data)
         return objects, 0, None
 
@@ -34,7 +51,7 @@ class CrudOrder(CRUDBase[Order, OrderCreate, OrderUpdate]):
         response = await db.execute(query)
         current_obj = response.scalar_one_or_none()
         if current_obj is None:
-            return None, -3, None
+            return None, "Not found order with this id", None
         objects = await self.update(db_session=db, obj_current=current_obj, obj_new=update_data)
         return objects, 0, None
 

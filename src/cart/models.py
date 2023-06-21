@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Float, MetaData, TIMESTAMP
+from sqlalchemy import Column, Integer, ForeignKey, Float, MetaData
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -11,10 +11,10 @@ class Cart(Base):
     __tablename__ = "cart"
     metadata = metadata
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     cart_id = Column(Integer, nullable=False)
     dish_id = Column(Integer, ForeignKey(Dish.id, ondelete="SET NULL"), nullable=True)
     amount = Column(Integer, nullable=False)
     sum = Column(Float, nullable=False)
 
-    dish = relationship("Dish")
+    dish = relationship("Dish", backref="dishes", lazy="joined")

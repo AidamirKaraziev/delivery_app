@@ -1,7 +1,6 @@
 from datetime import datetime
 
-
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Float, MetaData, TIMESTAMP
+from sqlalchemy import Column, Integer, ForeignKey, Boolean, MetaData, TIMESTAMP
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import select, func
 from database import Base
@@ -17,7 +16,7 @@ class Order(Base):
     __tablename__ = "order"
     metadata = metadata
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     selling_point_id = Column(Integer, ForeignKey(SellingPoint.id, ondelete="SET NULL"), nullable=True)
     cart_id = Column(Integer, ForeignKey(Cart.cart_id, ondelete="SET NULL"), nullable=True)
 
@@ -30,9 +29,9 @@ class Order(Base):
     status_id = Column(Integer, ForeignKey(Status.id, ondelete="SET NULL"), nullable=True)
     is_active = Column(Boolean, default=True, nullable=False)
 
-    selling_point = relationship("SellingPoint", backref="selling_points", lazy="joined")
-    cart = relationship("Cart", lazy="joined")
-    status = relationship("Status", lazy="joined")
+    selling_point = relationship(SellingPoint, backref="selling_points", lazy="joined")
+    cart = relationship(Cart, backref="carts", lazy="joined")
+    status = relationship(Status, backref="statuses", lazy="joined")
 
     @staticmethod
     async def calculate_sum(cart_id, async_session):

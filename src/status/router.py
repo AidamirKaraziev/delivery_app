@@ -1,6 +1,6 @@
 import logging
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from auth.base_config import fastapi_users
@@ -47,9 +47,8 @@ async def get_status(
         session: AsyncSession = Depends(get_async_session),
 ):
     obj, code, indexes = await crud_status.get_status_by_id(db=session, status_id=status_id)
-    # ошибки обработать
-    if code == -1:
-        return SingleEntityResponse(data="ERROR")
+    if code != 0:
+        raise HTTPException(status_code=404, detail="Resource with this ID does not exist")
     return SingleEntityResponse(data=getting_status(obj=obj))
 
 

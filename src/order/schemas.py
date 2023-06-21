@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from typing import Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from selling_point.schemas import SellingPointGet
 from cart.schemas import CartGet
@@ -25,7 +25,7 @@ class OrderGet(BaseModel):
 
 
 class OrderCreate(BaseModel):
-    selling_point_id: Optional[int] = None
+    selling_point_id: int
     cart_id: int
 
     amount: int
@@ -39,7 +39,7 @@ class OrderCreate(BaseModel):
 
 
 class OrderUpdate(BaseModel):
-    selling_point_id: Optional[int] = None
+    selling_point_id: int
     cart_id: int
 
     amount: int

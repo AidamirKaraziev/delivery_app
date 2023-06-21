@@ -48,7 +48,6 @@ async def get_order_by_id(
         session: AsyncSession = Depends(get_async_session),
 ):
     order, code, indexes = await crud_order.get_order_by_id(db=session, order_id=order_id)
-    # ошибки обработать
     if code != 0:
         raise HTTPException(status_code=404, detail="Resource with this ID does not exist")
     return SingleEntityResponse(data=getting_order(obj=order))
@@ -66,7 +65,6 @@ async def create_order(
         session: AsyncSession = Depends(get_async_session),
 ):
     obj, code, indexes = await crud_order.create_order(db=session, new_data=new_data)
-    # ошибки обработать
     if code != 0:
         raise HTTPException(status_code=409, detail="Resource already exists")
     return SingleEntityResponse(data=getting_order(obj=obj))
@@ -85,9 +83,8 @@ async def update_order(
         session: AsyncSession = Depends(get_async_session),
 ):
     order, code, indexes = await crud_order.update_order(db=session,
-                                                        update_data=update_data,
-                                                        order_id=order_id)
-    # ошибки обработать
+                                                         update_data=update_data,
+                                                         order_id=order_id)
     if code != 0:
         raise HTTPException(status_code=404, detail="Resource with this ID does not exist")
     return SingleEntityResponse(data=getting_order(obj=order))
