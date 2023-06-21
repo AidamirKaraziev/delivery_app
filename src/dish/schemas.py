@@ -15,14 +15,18 @@ class DishGet(BaseModel):
     composition: Optional[str]
     price: Optional[int]
 
-    promo_id: Optional[PromoGet] = None
+    promo_id: Optional[PromoGet]
+
     is_active: Optional[bool]
-    visible: Optional[bool] = True
+
+    visible: Optional[bool]
 
 
 class DishCreate(BaseModel):
+
     name: str
     description: str
+
     composition: str
     price: int
 

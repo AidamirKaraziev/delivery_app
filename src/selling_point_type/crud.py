@@ -20,7 +20,7 @@ class CrudSellingPointType(CRUDBase[SellingPointType, SellingPointTypeCreate, Se
         return selling_point_types, 0, None
 
     async def create_selling_point_type(self, *, db: AsyncSession, new_data: SellingPointTypeCreate):
-        # check by id
+        # check name
         query = select(self.model).where(self.model.name == new_data.name)
         response = await db.execute(query)
         if response.scalar_one_or_none() is not None:

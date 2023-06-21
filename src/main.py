@@ -14,7 +14,9 @@ from promo.router import router as router_promo
 from dish.router import router as router_dish
 from selling_point.router import router as router_selling_point
 from selling_point_type.router import router as router_sp_type
+
 from user.router import router as router_user, get_users_router
+from core.initial_data import create_initial_data
 
 current_user = fastapi_users.current_user()
 
@@ -65,6 +67,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 async def startup_event():
     redis = aioredis.from_url("redis://localhost", encoding="utf8", decode_responses=True)
     FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
+    await create_initial_data()
 
 
 @app.get("/protected-route")

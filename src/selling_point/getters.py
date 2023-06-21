@@ -2,10 +2,10 @@ from typing import Optional
 from fastapi import Request
 
 
+
 from selling_point.schemas import SellingPointGet
 from selling_point_type.getters import getting_selling_point_type
 from user.getters import getting_user
-
 
 def getting_selling_point(obj: SellingPointGet, request: Optional[Request]) -> Optional[SellingPointGet]:
     if request is not None:

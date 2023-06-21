@@ -9,6 +9,7 @@ class SellingPointGet(BaseModel):
     name: str
     photo: Optional[str]
     selling_point_type_id: Optional[SellingPointTypeGet]
+
     address: str
     client_id: Optional[UserGet]
     is_active: Optional[bool]
@@ -16,14 +17,18 @@ class SellingPointGet(BaseModel):
 
 class SellingPointCreate(BaseModel):
     name: str
+
     selling_point_type_id: Optional[int]
+
     address: str
     client_id: Optional[int]
     is_active: Optional[bool] = True
 
 
 class SellingPointUpdate(BaseModel):
+
     name: Optional[str]
     selling_point_type_id: Optional[int]
     address: Optional[str]
     is_active: Optional[bool]
+      

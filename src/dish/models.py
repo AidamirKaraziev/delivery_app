@@ -24,7 +24,8 @@ class Dish(Base):
 
     promo_id = Column(Integer, ForeignKey(Promo.id, ondelete="SET NULL"), nullable=True)
     visible = Column(Boolean, nullable=False)
+    is_active = Column(Boolean, default=True)
 
     promo = relationship(Promo, backref="promos", lazy="joined")
 
-    is_active = Column(Boolean, default=True, nullable=False)
+

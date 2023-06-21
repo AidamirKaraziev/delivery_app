@@ -20,7 +20,7 @@ class CrudSellingPoint(CRUDBase[SellingPoint, SellingPointCreate, SellingPointUp
         return selling_points, 0, None
 
     async def create_selling_point(self, *, db: AsyncSession, new_data: SellingPointCreate):
-        # check id
+        # check name
         query = select(self.model).where(self.model.name == new_data.name)
         response = await db.execute(query)
         if response.scalar_one_or_none() is not None:
