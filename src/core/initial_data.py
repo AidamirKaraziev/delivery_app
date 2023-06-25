@@ -37,38 +37,31 @@ async def check_order_statuses(session: AsyncSession = Depends(get_async_session
     status_created = await session.execute(query_created)
     status_in_progress = await session.execute(query_in_progress)
     status_completed = await session.execute(query_completed)
+    statuses = [status_created, status_in_progress, status_completed]
 
-    if status_created.scalar_one_or_none() is not None:
-        status_created_is_exist = True
-    else:
-        status_created_is_exist = False
+    result = []
+    for status in statuses:
+        if status.scalar_one_or_none() is not None:
+            result.append(True)
+        else:
+            result.append(False)
 
-    if status_in_progress.scalar_one_or_none() is not None:
-        status_in_progress_is_exist = True
-    else:
-        status_in_progress_is_exist = False
-
-    if status_completed.scalar_one_or_none() is not None:
-        status_completed_is_exist = True
-    else:
-        status_completed_is_exist = False
-
-    return status_created_is_exist, status_in_progress_is_exist, status_completed_is_exist
+    return result
 
 
 async def create_statuses():
     async for db in get_async_session():
         statuses = []
 
-        created_is_exist, in_progress_is_exist, completed_is_exist = await check_order_statuses(db)
-        if created_is_exist and in_progress_is_exist and completed_is_exist:
+        statuses_is_exist = await check_order_statuses(db)
+        if statuses_is_exist[0] and statuses_is_exist[1] and statuses_is_exist[2]:
             return  # Начальные данные уже существуют
 
-        if not created_is_exist:
+        if not statuses_is_exist[0]:
             statuses.append(Status(id=1, name='created'))
-        if not in_progress_is_exist:
+        if not statuses_is_exist[1]:
             statuses.append(Status(id=2, name='in_progress'))
-        if not completed_is_exist:
+        if not statuses_is_exist[2]:
             statuses.append(Status(id=3, name='completed'))
 
         [db.add(status) for status in statuses]
