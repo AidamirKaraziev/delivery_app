@@ -12,7 +12,7 @@ router = APIRouter(prefix="/report")
 #     # 600 ms - Задача выполняется воркером Celery в отдельном процессе
 #     send_email_report_dashboard.delay(user.username)
 #     return {
-#         "status": 200,
+#         "order_status": 200,
 #         "data": "Письмо отправлено",
 #         "details": None
 #     }
@@ -23,7 +23,7 @@ router = APIRouter(prefix="/report")
 #     send_email_report_dashboard.delay(user.username)
 #
 #     return {
-#         "status": 200,
+#         "order_status": 200,
 #         "data": "Письмо отправлено",
 #         "details": None
 #     }
@@ -36,7 +36,7 @@ router = APIRouter(prefix="/report")
 #     # 600 ms - Задача выполняется воркером Celery в отдельном процессе
 #     send_email_report_dashboard.delay(user.username)
 #     return {
-#         "status": 200,
+#         "order_status": 200,
 #         "data": "Письмо отправлено",
 #         "details": None
 #     }

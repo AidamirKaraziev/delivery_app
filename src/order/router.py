@@ -1,6 +1,7 @@
+import datetime
 import logging
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from auth.base_config import fastapi_users
@@ -27,13 +28,14 @@ router = APIRouter(
     description='Получение списка всех заказов'
 )
 async def get_orders(
+        request: Request,
         limit: int = 100,
         skip: int = 0,
         user: User = Depends(current_active_user),
         session: AsyncSession = Depends(get_async_session),
 ):
     orders, code, indexes = await crud_order.get_all_orders(db=session, skip=skip, limit=limit)
-    return ListOfEntityResponse(data=[getting_order(order) for order in orders])
+    return ListOfEntityResponse(data=[getting_order(obj=order, request=request) for order in orders])
 
 
 @router.get(
@@ -43,6 +45,7 @@ async def get_orders(
     description='Вывод заказа по идентификатору'
 )
 async def get_order_by_id(
+        request: Request,
         order_id: int,
         user: User = Depends(current_active_user),
         session: AsyncSession = Depends(get_async_session),
@@ -50,7 +53,7 @@ async def get_order_by_id(
     order, code, indexes = await crud_order.get_order_by_id(db=session, order_id=order_id)
     if code != 0:
         raise HTTPException(status_code=404, detail="Resource with this ID does not exist")
-    return SingleEntityResponse(data=getting_order(obj=order))
+    return SingleEntityResponse(data=getting_order(obj=order, request=request))
 
 
 @router.post(
@@ -60,14 +63,15 @@ async def get_order_by_id(
     description='Добавление заказа'
 )
 async def create_order(
+        request: Request,
         new_data: OrderCreate,
         user: User = Depends(current_active_superuser),
         session: AsyncSession = Depends(get_async_session),
 ):
     obj, code, indexes = await crud_order.create_order(db=session, new_data=new_data)
     if code != 0:
-        raise HTTPException(status_code=409, detail="Resource already exists")
-    return SingleEntityResponse(data=getting_order(obj=obj))
+        raise HTTPException(status_code=409, detail=code)
+    return SingleEntityResponse(data=getting_order(obj=obj, request=request))
 
 
 @router.put(
@@ -77,6 +81,7 @@ async def create_order(
     description='Изменение заказа'
 )
 async def update_order(
+        request: Request,
         update_data: OrderUpdate,
         order_id: int,
         user: User = Depends(current_active_superuser),
@@ -86,8 +91,8 @@ async def update_order(
                                                          update_data=update_data,
                                                          order_id=order_id)
     if code != 0:
-        raise HTTPException(status_code=404, detail="Resource with this ID does not exist")
-    return SingleEntityResponse(data=getting_order(obj=order))
+        raise HTTPException(status_code=404, detail=code)
+    return SingleEntityResponse(data=getting_order(obj=order, request=request))
 
 
 if __name__ == "__main__":

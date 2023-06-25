@@ -1,6 +1,6 @@
 import logging
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from auth.base_config import fastapi_users
@@ -21,37 +21,39 @@ router = APIRouter(
 
 
 @router.get(
-    path='/{item_id}',
-    response_model=ListOfEntityResponse,
+    path='/item/{item_id}',
+    response_model=SingleEntityResponse,
     name='get_item_by_id',
     description='Вывод элемента корзины по его id'
 )
 async def get_item_by_id(
+        request: Request,
         item_id: int,
         user: User = Depends(current_active_user),
         session: AsyncSession = Depends(get_async_session),
 ):
-    item, code, indexes = await crud_cart.get_item_cart_by_id(db=session, cart_id=item_id)
+    obj, code, indexes = await crud_cart.get_item_by_id(db=session, item_id=item_id)
     if code != 0:
-        raise HTTPException(status_code=404, detail="Resource with this ID does not exist")
-    return SingleEntityResponse(data=get_item_by_id(obj=item))
+        raise HTTPException(status_code=404, detail=code)
+    return SingleEntityResponse(data=getting_cart(obj=obj, request=request))
 
 
 @router.get(
-    path="/{cart_id}",
+    path="/{order_id}",
     response_model=ListOfEntityResponse,
-    name='get_cart_by_id',
-    description='Вывод всех элементов корзины по cart_id'
+    name='get_cart_by_order_id',
+    description='Вывод всех элементов корзины по order_id'
 )
-async def get_cart_by_id(
-        cart_id: int,
+async def get_cart_by_order_id(
+        request: Request,
+        order_id: int,
         user: User = Depends(current_active_user),
         session: AsyncSession = Depends(get_async_session),
 ):
-    cart_items, code, indexes = await crud_cart.get_cart_by_id(db=session, cart_id=cart_id)
+    objects, code, indexes = await crud_cart.get_cart_by_order_id(db=session, order_id=order_id)
     if code != 0:
-        raise HTTPException(status_code=404, detail="Resource with this ID does not exist")
-    return ListOfEntityResponse(data=[getting_cart(item) for item in cart_items])
+        raise HTTPException(status_code=404, detail=code)
+    return ListOfEntityResponse(data=[getting_cart(obj=item, request=request) for item in objects])
 
 
 @router.post(
@@ -61,14 +63,15 @@ async def get_cart_by_id(
     description='Добавление позиции в корзину'
 )
 async def create_cart_item(
+        request: Request,
         new_data: CartCreate,
         user: User = Depends(current_active_superuser),
         session: AsyncSession = Depends(get_async_session),
 ):
     obj, code, indexes = await crud_cart.create_item_cart(db=session, new_data=new_data)
     if code != 0:
-        raise HTTPException(status_code=409, detail="Resource already exists")
-    return SingleEntityResponse(data=get_item_by_id(obj=obj))
+        raise HTTPException(status_code=409, detail=code)
+    return SingleEntityResponse(data=getting_cart(obj=obj, request=request))
 
 
 @router.put(
@@ -78,17 +81,18 @@ async def create_cart_item(
     description='Изменение позиции в корзине'
 )
 async def update_cart_item(
+        request: Request,
         update_data: CartUpdate,
         item_id: int,
         user: User = Depends(current_active_superuser),
         session: AsyncSession = Depends(get_async_session),
 ):
-    item_cart, code, indexes = await crud_cart.update_item_cart(db=session,
+    obj, code, indexes = await crud_cart.update_item_cart(db=session,
                                                                 update_data=update_data,
                                                                 item_id=item_id)
     if code != 0:
-        raise HTTPException(status_code=404, detail="Resource with this ID does not exist")
-    return SingleEntityResponse(data=get_item_by_id(obj=item_cart))
+        raise HTTPException(status_code=404, detail=code)
+    return SingleEntityResponse(data=getting_cart(obj=obj, request=request))
 
 
 if __name__ == "__main__":

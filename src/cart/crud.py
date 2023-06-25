@@ -11,15 +11,15 @@ from core.base_crud import CRUDBase
 
 class CrudCart(CRUDBase[Cart, CartCreate, CartUpdate]):
 
-    async def get_item_cart_by_id(self, *, db: AsyncSession, item_id: int):
+    async def get_item_by_id(self, *, db: AsyncSession, item_id: int):
         obj = await self.get(db=db, id=item_id)
         if obj is None:
             return None, "Not found item with this id", None
         return obj, 0, None
 
-    async def get_cart_by_id(self, *, db: AsyncSession, cart_id: int):
+    async def get_cart_by_order_id(self, *, db: AsyncSession, order_id: int):
         db_session = db or self.db.session
-        query = select(self.model).where(self.model.cart_id == cart_id)
+        query = select(self.model).where(self.model.order_id == order_id)
         response = await db_session.execute(query)
         objects = response.scalars().all()
         if objects is None:
@@ -39,7 +39,7 @@ class CrudCart(CRUDBase[Cart, CartCreate, CartUpdate]):
             return None, "Not found dish with this id", None
 
         # check dish exist in this cart
-        query = select(self.model).where(self.model.cart_id == new_data.cart_id,
+        query = select(self.model).where(self.model.order_id == new_data.order_id,
                                          self.model.dish_id == new_data.dish_id)
         response = await db.execute(query)
         if response.scalar_one_or_none() is not None:
