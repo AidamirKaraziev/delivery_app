@@ -1,5 +1,5 @@
 from typing import Optional
-from status.schemas import StatusGet
+from our_status.schemas import StatusGet
 
 
 def getting_status(obj: StatusGet) -> Optional[StatusGet]:

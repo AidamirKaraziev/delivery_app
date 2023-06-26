@@ -6,7 +6,7 @@ metadata = MetaData()
 
 class Status(Base):
     __tablename__ = "status"
-    metadata = metadata
 
+    metadata = metadata
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)

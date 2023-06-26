@@ -7,7 +7,7 @@ from database import Base
 
 from selling_point.models import SellingPoint
 from cart.models import Cart
-from status.models import Status
+from our_status.models import Status
 
 metadata = MetaData()
 
@@ -18,7 +18,7 @@ class Order(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     selling_point_id = Column(Integer, ForeignKey(SellingPoint.id, ondelete="SET NULL"), nullable=True)
-    cart_id = Column(Integer, ForeignKey(Cart.cart_id, ondelete="SET NULL"), nullable=True)
+    cart_id = Column(Integer, ForeignKey(Cart.id, ondelete="SET NULL"), nullable=True)  # ВРЕМЕННОЕ РЕШЕНИЕ ЧТОБЫ ЗАРАБОТАЛО, УДАЛИТЬ!!!
 
     amount = Column(Integer, nullable=False)
     sum = Column(Integer, nullable=False, default=0)

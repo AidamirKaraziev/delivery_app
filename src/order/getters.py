@@ -2,7 +2,7 @@ from typing import Optional
 from order.schemas import OrderGet
 from cart.getters import getting_cart
 from selling_point.getters import getting_selling_point
-from status.getters import getting_status
+from our_status.getters import getting_status
 
 
 def getting_order(obj: OrderGet) -> Optional[OrderGet]:

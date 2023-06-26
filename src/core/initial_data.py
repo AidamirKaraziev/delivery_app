@@ -5,9 +5,9 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import Depends
 
-from src.auth.models import User
-from src.role.models import Role
-from src.database import get_async_session
+from auth.models import User
+from role.models import Role
+from database import get_async_session
 
 from config import SUPERUSER_EMAIL
 from config import SUPERUSER_PASSWORD
@@ -98,5 +98,6 @@ async def crete_superuser():
 
 
 async def create_initial_data():
-    await create_roles()
-    await crete_superuser()
+    # await create_roles()
+    # await crete_superuser()
+    pass

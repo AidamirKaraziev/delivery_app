@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 from selling_point.schemas import SellingPointGet
 from cart.schemas import CartGet
-from status.schemas import StatusGet
+from our_status.schemas import StatusGet
 
 
 class OrderGet(BaseModel):
