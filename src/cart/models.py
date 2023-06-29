@@ -17,7 +17,7 @@ class Cart(Base):
     order = relationship("Order", back_populates="cart", lazy="joined")
 
     dish_id = Column(Integer, ForeignKey(Dish.id, ondelete="SET NULL"), nullable=True)
-    amount = Column(Integer, nullable=False)
+    quantity = Column(Integer, nullable=False)
     sum = Column(Float, nullable=False)
 
     dish = relationship(Dish, backref="carts", lazy="joined")

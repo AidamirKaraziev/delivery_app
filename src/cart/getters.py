@@ -10,6 +10,6 @@ def getting_cart(obj: CartGet, request: Optional[Request]) -> Optional[CartGet]:
         id=obj.id,
         order_id=obj.order_id,
         dish_id=getting_dish(obj.dish, request) if obj.dish is not None else None,
-        amount=obj.amount,
+        quantity=obj.quantity,
         sum=obj.sum,
     )

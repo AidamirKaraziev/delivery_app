@@ -88,8 +88,8 @@ async def update_cart_item(
         session: AsyncSession = Depends(get_async_session),
 ):
     obj, code, indexes = await crud_cart.update_item_cart(db=session,
-                                                                update_data=update_data,
-                                                                item_id=item_id)
+                                                          update_data=update_data,
+                                                          item_id=item_id)
     if code != 0:
         raise HTTPException(status_code=404, detail=code)
     return SingleEntityResponse(data=getting_cart(obj=obj, request=request))

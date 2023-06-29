@@ -1,10 +1,11 @@
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from cart.models import Cart
 from cart.schemas import CartCreate, CartUpdate
 
 from dish.models import Dish
+from order.models import Order
 
 from core.base_crud import CRUDBase
 
@@ -46,6 +47,23 @@ class CrudCart(CRUDBase[Cart, CartCreate, CartUpdate]):
             return None, "There is already this dish in this cart", None
 
         objects = await self.create(db_session=db, obj_in=new_data)
+
+        # Обновляем сумму в позиции
+        objects.sum = objects.quantity * objects.dish.price
+        db.add(objects)
+        await db.commit()
+        await db.refresh(objects)
+
+        # Обновляем сумму в заказе
+        query = select(func.sum(Cart.sum)).where(Cart.order_id == objects.order_id)
+        total_sum = await db.scalar(query)
+
+        order_object = await db.get(Order, objects.order_id)
+        order_object.sum = total_sum
+
+        await db.merge(order_object)
+        await db.commit()
+
         return objects, 0, None
 
     async def update_item_cart(self, *, db: AsyncSession, update_data: CartCreate, item_id: int):
@@ -56,6 +74,23 @@ class CrudCart(CRUDBase[Cart, CartCreate, CartUpdate]):
         if current_obj is None:
             return None, "Not found item_cart with this id", None
         objects = await self.update(db_session=db, obj_current=current_obj, obj_new=update_data)
+
+        # refresh item sum
+        objects.sum = objects.quantity * objects.dish.price
+        db.add(objects)
+        await db.commit()
+        await db.refresh(objects)
+
+        # refresh order sum
+        query = select(func.sum(Cart.sum)).where(Cart.order_id == objects.order_id)
+        total_sum = await db.scalar(query)
+
+        order_object = await db.get(Order, objects.order_id)
+        order_object.sum = total_sum
+
+        await db.merge(order_object)
+        await db.commit()
+
         return objects, 0, None
 
 
