@@ -5,6 +5,7 @@ from database import Base
 
 from selling_point.models import SellingPoint
 from order_status.models import Status
+from cart.models import Cart
 
 
 metadata = MetaData()
@@ -16,6 +17,7 @@ class Order(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     selling_point_id = Column(Integer, ForeignKey(SellingPoint.id, ondelete="SET NULL"), nullable=True)
+    
     cart = relationship("Cart", back_populates="order", uselist=False, lazy="joined")
 
     amount = Column(Integer, nullable=False)

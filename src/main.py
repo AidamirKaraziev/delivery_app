@@ -7,7 +7,8 @@ from redis import asyncio as aioredis
 from auth.base_config import auth_backend, fastapi_users
 from auth.manager import get_user_manager
 from auth.models import User
-from auth.schemas import UserRead, UserCreate, UserUpdate
+from auth.schemas import UserRead, UserCreate, UserUpdate, UserReadOld
+from config import REDIS_HOST, REDIS_PORT
 
 from role.router import router as router_role
 from promo.router import router as router_promo
@@ -19,7 +20,11 @@ from order.router import router as router_order
 from order_status.router import router as router_order_status
 
 from user.router import router as router_user, get_users_router
-from core.initial_data import create_initial_data
+# from core.initial_data import create_initial_data
+from cart.router import router as router_cart
+from order.router import router as router_order
+from our_status.router import router as router_status
+
 
 current_user = fastapi_users.current_user()
 
@@ -34,7 +39,7 @@ app.include_router(
 )
 
 app.include_router(
-    fastapi_users.get_register_router(UserRead, UserCreate),
+    fastapi_users.get_register_router(UserReadOld, UserCreate),
     prefix="/auth",
     tags=["Auth"],
 )
@@ -71,9 +76,9 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.on_event("startup")
 async def startup_event():
-    redis = aioredis.from_url("redis://localhost", encoding="utf8", decode_responses=True)
+    redis = aioredis.from_url(f"redis://{REDIS_HOST:{REDIS_PORT}}", encoding="utf8", decode_responses=True)
     FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
-    await create_initial_data()
+    # await create_initial_data()
 
 
 @app.get("/protected-route")

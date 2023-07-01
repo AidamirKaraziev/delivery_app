@@ -7,7 +7,6 @@ from order.schemas import OrderCreate, OrderUpdate
 from selling_point.models import SellingPoint
 from cart.models import Cart
 from order_status.models import Status
-
 from core.base_crud import CRUDBase
 
 

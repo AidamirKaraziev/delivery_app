@@ -4,12 +4,12 @@ from typing import Optional
 
 from celery import Celery
 
-from config import SMTP_USER, SMTP_PASSWORD
+from config import SMTP_USER, SMTP_PASSWORD, REDIS_HOST, REDIS_PORT
 
 SMTP_HOST = "smtp.gmail.com"
 SMTP_PORT = 465
 
-celery = Celery('tasks', broker='redis://localhost:6379')
+celery = Celery('tasks', broker=f'redis://{REDIS_HOST}:{REDIS_PORT}')
 
 
 def get_email_template_forgot_password(name: str, email_to: Optional[str], token: str):
