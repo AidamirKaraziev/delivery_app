@@ -14,6 +14,9 @@ from promo.router import router as router_promo
 from dish.router import router as router_dish
 from selling_point.router import router as router_selling_point
 from selling_point_type.router import router as router_sp_type
+from cart.router import router as router_cart
+from order.router import router as router_order
+from order_status.router import router as router_order_status
 
 from user.router import router as router_user, get_users_router
 from core.initial_data import create_initial_data
@@ -60,6 +63,9 @@ app.include_router(router_promo)
 app.include_router(router_dish)
 app.include_router(router_selling_point)
 app.include_router(router_sp_type)
+app.include_router(router_cart)
+app.include_router(router_order)
+app.include_router(router_order_status)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 

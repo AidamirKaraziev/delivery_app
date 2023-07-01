@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 from database import Base
 
 from dish.models import Dish
+from order.models import Order
 
 metadata = MetaData()
 
@@ -12,9 +13,11 @@ class Cart(Base):
     metadata = metadata
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    cart_id = Column(Integer, nullable=False)
+    order_id = Column(Integer, ForeignKey(Order.id, ondelete="SET NULL"), nullable=True)
+    order = relationship("Order", back_populates="cart", lazy="joined")
+
     dish_id = Column(Integer, ForeignKey(Dish.id, ondelete="SET NULL"), nullable=True)
-    amount = Column(Integer, nullable=False)
+    quantity = Column(Integer, nullable=False)
     sum = Column(Float, nullable=False)
 
-    dish = relationship("Dish", backref="dishes", lazy="joined")
+    dish = relationship(Dish, backref="carts", lazy="joined")

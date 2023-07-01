@@ -5,20 +5,20 @@ from pydantic import BaseModel
 
 from selling_point.schemas import SellingPointGet
 from cart.schemas import CartGet
-from status.schemas import StatusGet
+from order_status.schemas import StatusGet
 
 
 class OrderGet(BaseModel):
 
     id: int
     selling_point_id: Optional[SellingPointGet] = None
-    cart_id: Optional[CartGet] = None
+    cart: Optional[CartGet] = None
 
     amount: int
     sum: float
 
-    created_at: datetime
-    completed_at: datetime
+    created_at: Optional[datetime] = None
+    completed_at: Optional[datetime] = None
 
     status_id: Optional[StatusGet] = None
     is_active: Optional[bool] = True
@@ -26,13 +26,9 @@ class OrderGet(BaseModel):
 
 class OrderCreate(BaseModel):
     selling_point_id: int
-    cart_id: int
 
     amount: int
     sum: float
-
-    created_at: datetime
-    completed_at: datetime
 
     status_id: int
     is_active: Optional[bool] = True
@@ -40,13 +36,11 @@ class OrderCreate(BaseModel):
 
 class OrderUpdate(BaseModel):
     selling_point_id: int
-    cart_id: int
 
     amount: int
     sum: float
 
-    created_at: datetime
-    completed_at: datetime
+    completed_at: Optional[datetime] = None
 
     status_id: int
     is_active: Optional[bool] = True

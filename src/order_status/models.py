@@ -5,7 +5,7 @@ metadata = MetaData()
 
 
 class Status(Base):
-    __tablename__ = "status"
+    __tablename__ = "order_status"
     metadata = metadata
 
     id = Column(Integer, primary_key=True)

@@ -5,8 +5,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from auth.base_config import fastapi_users
 from auth.models import User
-from status.crud import crud_status
-from status.getters import getting_status
+from order_status.crud import crud_status
+from order_status.getters import getting_status
 
 from core.response import SingleEntityResponse, ListOfEntityResponse, Meta
 from database import get_async_session
@@ -14,7 +14,7 @@ from database import get_async_session
 current_active_user = fastapi_users.current_user(active=True)
 
 router = APIRouter(
-    prefix="/status",
+    prefix="/order_status",
     tags=["Status"]
 )
 
