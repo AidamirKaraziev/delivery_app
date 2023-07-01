@@ -5,7 +5,6 @@ from database import Base
 
 from selling_point.models import SellingPoint
 from order_status.models import Status
-from cart.models import Cart
 
 
 metadata = MetaData()
