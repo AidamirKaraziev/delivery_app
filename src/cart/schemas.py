@@ -5,26 +5,24 @@ from dish.schemas import DishGet
 
 
 class CartGet(BaseModel):
-    item_id: int
-    cart_id: int
+    id: int
+    order_id: int
     dish_id: Optional[DishGet] = None
-    amount: int
+    quantity: int
     sum: float
 
 
 class CartCreate(BaseModel):
-    item_id: int
-    cart_id: int
+    order_id: int
     dish_id: int
-    amount: int
+    quantity: int
     sum: float
 
 
 class CartUpdate(BaseModel):
-    item_id: int
-    cart_id: int
+    order_id: int
     dish_id: int
-    amount: int
+    quantity: int
     sum: float
 
 

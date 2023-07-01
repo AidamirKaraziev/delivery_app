@@ -4,7 +4,6 @@ from dish.schemas import DishGet
 from promo.getters import getting_promo
 
 
-
 def getting_dish(obj: DishGet, request: Request) -> Optional[DishGet]:
     if request is not None:
         url = request.url.hostname + ":8000" + "/static/"
