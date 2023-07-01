@@ -95,5 +95,22 @@ async def update_cart_item(
     return SingleEntityResponse(data=getting_cart(obj=obj, request=request))
 
 
+@router.delete(
+    path="/{item_id}",
+    response_model=SingleEntityResponse,
+    name='delete_cart_item',
+    description='Изменение позиции в корзине'
+)
+async def delete_cart_item(
+        request: Request,
+        item_id: int,
+        user: User = Depends(current_active_superuser),
+        session: AsyncSession = Depends(get_async_session),
+):
+    obj, code, indexes = await crud_cart.delete_item_cart(db=session, item_id=item_id)
+    if code != 0:
+        raise HTTPException(status_code=404, detail=code)
+    return SingleEntityResponse(data=getting_cart(obj=obj, request=request))
+
 if __name__ == "__main__":
     logging.info('Running...')

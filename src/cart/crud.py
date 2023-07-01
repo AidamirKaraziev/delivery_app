@@ -93,5 +93,26 @@ class CrudCart(CRUDBase[Cart, CartCreate, CartUpdate]):
 
         return objects, 0, None
 
+    async def delete_item_cart(self, *, db: AsyncSession, item_id: int):
+        # check id
+        obj = await self.get(db=db, id=item_id)
+        if obj is None:
+            return None, "Not found item with this id", None
+
+        await self.delete(id=item_id, db=db)
+
+        # refresh order sum
+        query = select(func.sum(Cart.sum)).where(Cart.order_id == obj.order_id)
+        total_sum = await db.scalar(query)
+
+        order_object = await db.get(Order, obj.order_id)
+        order_object.sum = total_sum
+
+        await db.merge(order_object)
+        await db.commit()
+
+        return obj, 0, None
+
+
 
 crud_cart = CrudCart(Cart)
