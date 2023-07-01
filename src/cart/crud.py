@@ -114,5 +114,4 @@ class CrudCart(CRUDBase[Cart, CartCreate, CartUpdate]):
         return obj, 0, None
 
 
-
 crud_cart = CrudCart(Cart)
