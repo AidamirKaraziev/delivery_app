@@ -28,6 +28,7 @@ current_user = fastapi_users.current_user()
 app = FastAPI(
     title="Delivery App"
 )
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 app.include_router(
     fastapi_users.get_auth_router(auth_backend),
@@ -49,7 +50,7 @@ app.include_router(
 )
 
 app.include_router(
-    fastapi_users.get_verify_router(UserRead),
+    fastapi_users.get_verify_router(UserReadOld),
     prefix="/auth",
     tags=["auth"],
 )
@@ -68,7 +69,6 @@ app.include_router(router_sp_type)
 app.include_router(router_cart)
 app.include_router(router_order)
 app.include_router(router_order_status)
-app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @app.on_event("startup")

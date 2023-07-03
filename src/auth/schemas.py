@@ -71,7 +71,7 @@ class UserReadOld(schemas.BaseUser[int]):
     email: Optional[str]
     phone_number: Optional[str]
     registered_at: Optional[Date]
-    role_id: Optional[RoleGet]
+    role_id: Optional[int]
     is_active: bool = True
     is_superuser: bool = False
     is_verified: bool = False

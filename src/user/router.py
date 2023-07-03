@@ -40,6 +40,7 @@ router = APIRouter(
     prefix="/users",
     tags=["users"]
 )
+router.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @router.get(
@@ -138,9 +139,6 @@ async def upload_n_download(file: UploadFile):
         file.file.close()
 
     return FileResponse(path=SAVE_FILE_PATH, media_type="application/octet-stream", filename=new_filename)
-
-
-router.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @router.put("/me/add-photo/",
