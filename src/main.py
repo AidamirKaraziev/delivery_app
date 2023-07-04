@@ -32,10 +32,14 @@ app = FastAPI(
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 app.include_router(
-    fastapi_users.get_auth_router(auth_backend),
-    prefix="/auth",
-    tags=["Auth"],
-)
+    fastapi_users.get_auth_router(auth_backend), prefix="/auth/jwt", tags=["Bearer-auth"]
+                  )
+
+# app.include_router(
+#     fastapi_users.get_auth_router(auth_backend),
+#     prefix="/auth",
+#     tags=["Auth"],
+# )
 
 app.include_router(
     fastapi_users.get_register_router(UserReadOld, UserCreate),
@@ -80,6 +84,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+# это более безопасный подход, надо - вот так!
 # origins = [
 #     "http://localhost:3000",
 #     "http://localhost:8000",
