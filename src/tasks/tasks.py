@@ -20,10 +20,10 @@ def get_email_template_forgot_password(name: str, email_to: Optional[str], token
 
     email.set_content(
         '<div>'
-        f'<h1 style="color: red;">Здравствуйте, {name}, а вот и ваш токен. Зацените 😊</h1>'
-        f'<h2 style="color: blue;">{token}</h2>'
-        '<img src="https://avatars.mds.yandex.net/i?id=08dfbbeb4c849fb816c77a5b03a880612bf491c3-8257511-images-thumbs&n=13'
-        '-management-dashboard-ui-design-template-suitable-designing-application-for-android-and-ios-clean-style-app'
+        f'<h1 style="color: black;">Здравствуйте, {name}, а вот и ваш токен. Зацените 😊</h1>'
+        f'<h3 style="color: blue;">{token}</h3>'
+        f'<h3 style="color: black;">Скопируйте его и вставьте в мобильном приложении, чтобы спросить свой пароль!</h3>'
+        '<-management-dashboard-ui-design-template-suitable-designing-application-for-android-and-ios-clean-style-app'
         '-mobile-free-vector.jpg" width="600">'
         '</div>',
         subtype='html'
@@ -40,10 +40,10 @@ def get_email_template_request_verify(name: str, email_to: Optional[str], token:
 
     email.set_content(
         '<div>'
-        f'<h1 style="color: red;">Здравствуйте, {name}, а вот и ваш токен. Зацените 😊</h1>'
+        f'<h1 style="color: black;">Здравствуйте, {name}, а вот и ваш токен. Зацените 😊</h1>'
         f'<h2 style="color: blue;">{token}</h2>'
-        '<img src="https://avatars.mds.yandex.net/i?id=08dfbbeb4c849fb816c77a5b03a880612bf491c3-8257511-images-thumbs&n=13'
-        '-management-dashboard-ui-design-template-suitable-designing-application-for-android-and-ios-clean-style-app'
+        f'<h3 style="color: black;">Скопируйте его и вставьте в мобильном приложении, чтобы пройти верификацию!</h3>'
+        '<-management-dashboard-ui-design-template-suitable-designing-application-for-android-and-ios-clean-style-app'
         '-mobile-free-vector.jpg" width="600">'
         '</div>',
         subtype='html'
