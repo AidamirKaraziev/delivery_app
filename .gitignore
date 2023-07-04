@@ -3,4 +3,8 @@
 .env-non-dev
 .pytest_cache
 venv
-
+/static/*
+/src/static/dish/
+/src/static/user/
+/src/static/index.html
+/src/static/selling_point/

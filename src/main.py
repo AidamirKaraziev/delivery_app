@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends
 from fastapi.staticfiles import StaticFiles
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
+from fastapi.middleware.cors import CORSMiddleware
 
 from redis import asyncio as aioredis
 from auth.base_config import auth_backend, fastapi_users
@@ -69,6 +70,23 @@ app.include_router(router_sp_type)
 app.include_router(router_cart)
 app.include_router(router_order)
 app.include_router(router_order_status)
+
+
+origins = [
+    "http://localhost:3000",
+    "http://localhost:8000",
+    "http://90.156.229.61:8000/docs#/",
+    "http://90.156.229.61:8000/"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "OPTIONS", "DELETE", "PATCH", "PUT"],
+    allow_headers=["Content-Type", "Set-Cookie", "Access-Control-Allow-Headers", "Access-Control-Allow-Origin",
+                   "Authorization"],
+)
 
 
 @app.on_event("startup")
