@@ -71,22 +71,30 @@ app.include_router(router_cart)
 app.include_router(router_order)
 app.include_router(router_order_status)
 
-
-origins = [
-    "http://localhost:3000",
-    "http://localhost:8000",
-    "http://90.156.229.61:8000/docs#/",
-    "http://90.156.229.61:8000/"
-]
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS", "DELETE", "PATCH", "PUT"],
-    allow_headers=["Content-Type", "Set-Cookie", "Access-Control-Allow-Headers", "Access-Control-Allow-Origin",
-                   "Authorization"],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
+# origins = [
+#     "http://localhost:3000",
+#     "http://localhost:8000",
+#     "http://90.156.229.61:8000/docs#/",
+#     "http://90.156.229.61:8000/"
+# ]
+#
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,
+#     allow_credentials=True,
+#     allow_methods=["GET", "POST", "OPTIONS", "DELETE", "PATCH", "PUT"],
+#     allow_headers=["Content-Type", "Set-Cookie", "Access-Control-Allow-Headers", "Access-Control-Allow-Origin",
+#                    "Authorization"],
+# )
 
 
 @app.on_event("startup")
