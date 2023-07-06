@@ -73,6 +73,8 @@ async def create_selling_point(
         user: User = Depends(current_active_client),
         session: AsyncSession = Depends(get_async_session),
 ):
+    if user.is_superuser is True:
+        raise HTTPException(status_code=409, detail="Контрольные точки создают клиенты!")
     new_data.client_id = user.id
     selling_point, code, indexes = await crud_selling_point.create_selling_point(db=session, new_data=new_data)
     if code != 0:
@@ -93,6 +95,11 @@ async def update_selling_point(
         user: User = Depends(current_active_user),
         session: AsyncSession = Depends(get_async_session),
 ):
+    # check id user
+    ob, code, indexes = await crud_selling_point.get_selling_point_by_id(db=session, selling_point_id=selling_point_id)
+    if user.is_superuser is False:
+        if ob.client_id != user.id:
+            raise HTTPException(status_code=403, detail="Forbidden")
     selling_point, code, indexes = await crud_selling_point.update_selling_point(db=session,
                                                                                  update_data=update_data,
                                                                                  selling_point_id=selling_point_id)

@@ -13,7 +13,6 @@ def getting_order(obj: OrderGet, request: Optional[Request]) -> Optional[OrderGe
         selling_point_id=getting_selling_point(obj.selling_point) if obj.selling_point is not None else None,
         cart=getting_cart(obj=obj.cart, request=request) if obj.cart is not None else None,
 
-        amount=obj.amount,
         sum=obj.sum,
 
         created_at=obj.created_at,

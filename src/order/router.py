@@ -65,7 +65,7 @@ async def get_order_by_id(
 async def create_order(
         request: Request,
         new_data: OrderCreate,
-        user: User = Depends(current_active_superuser),
+        user: User = Depends(current_active_user),
         session: AsyncSession = Depends(get_async_session),
 ):
     obj, code, indexes = await crud_order.create_order(db=session, new_data=new_data)
@@ -84,7 +84,7 @@ async def update_order(
         request: Request,
         update_data: OrderUpdate,
         order_id: int,
-        user: User = Depends(current_active_superuser),
+        user: User = Depends(current_active_user),
         session: AsyncSession = Depends(get_async_session),
 ):
     order, code, indexes = await crud_order.update_order(db=session,

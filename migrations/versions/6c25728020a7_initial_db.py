@@ -1,8 +1,8 @@
-"""unitial1
+"""initial_db
 
-Revision ID: fa2f73081eee
+Revision ID: 6c25728020a7
 Revises: 
-Create Date: 2023-07-01 21:55:40.325475
+Create Date: 2023-07-06 15:38:04.006166
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'fa2f73081eee'
+revision = '6c25728020a7'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -27,7 +27,6 @@ def upgrade() -> None:
     op.create_table('selling_point_type',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
-    sa.Column('photo', sa.String(), nullable=True),
     sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
@@ -70,6 +69,7 @@ def upgrade() -> None:
     op.create_table('selling_point',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('name', sa.String(), nullable=False),
+    sa.Column('opening_hours', sa.String(), nullable=True),
     sa.Column('photo', sa.String(), nullable=True),
     sa.Column('selling_point_type_id', sa.Integer(), nullable=True),
     sa.Column('address', sa.String(), nullable=False),
@@ -87,7 +87,6 @@ def upgrade() -> None:
     op.create_table('order',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('selling_point_id', sa.Integer(), nullable=True),
-    sa.Column('amount', sa.Integer(), nullable=False),
     sa.Column('sum', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.TIMESTAMP(), nullable=True),
     sa.Column('completed_at', sa.TIMESTAMP(), nullable=True),

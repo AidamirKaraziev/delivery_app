@@ -7,6 +7,5 @@ def getting_selling_point_type(obj: SellingPointTypeGet) -> Optional[SellingPoin
     return SellingPointTypeGet(
         id=obj.id,
         name=obj.name,
-        photo=obj.photo,
         is_active=obj.is_active
     )

@@ -14,7 +14,6 @@ class OrderGet(BaseModel):
     selling_point_id: Optional[SellingPointGet] = None
     cart: Optional[CartGet] = None
 
-    amount: int
     sum: float
 
     created_at: Optional[datetime] = None
@@ -27,7 +26,6 @@ class OrderGet(BaseModel):
 class OrderCreate(BaseModel):
     selling_point_id: int
 
-    amount: int
     sum: float
 
     status_id: int
@@ -37,7 +35,6 @@ class OrderCreate(BaseModel):
 class OrderUpdate(BaseModel):
     selling_point_id: int
 
-    amount: int
     sum: float
 
     completed_at: Optional[datetime] = None

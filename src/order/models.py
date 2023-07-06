@@ -19,7 +19,6 @@ class Order(Base):
     
     cart = relationship("Cart", back_populates="order", uselist=False, lazy="joined")
 
-    amount = Column(Integer, nullable=False)
     sum = Column(Integer, nullable=False, default=0)
 
     created_at = Column(TIMESTAMP, default=datetime.utcnow)

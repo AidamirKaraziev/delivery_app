@@ -20,6 +20,7 @@ class SellingPoint(Base):
     selling_point_type_id = Column(Integer, ForeignKey(SellingPointType.id, ondelete="SET NULL"))
 
     address = Column(String, nullable=False)
+    opening_hours = Column(String, nullable=True)
     client_id = Column(Integer, ForeignKey(User.id, ondelete="SET NULL"))
     is_active = Column(Boolean, default=True, nullable=False)
 

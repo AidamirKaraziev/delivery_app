@@ -1,7 +1,7 @@
 from typing import Optional
 from fastapi import Request
 
-from auth.schemas import UserGet, UserRead
+from auth.schemas import UserRead
 from role.getters import getting_role
 
 
@@ -20,7 +20,6 @@ def getting_user(obj: UserRead,  request: Optional[Request]) -> Optional[UserRea
         phone_number=obj.phone_number,
         registered_at=obj.registered_at,  # сделать вывод в юникс секундах
         role_id=getting_role(obj.role) if obj.role is not None else None,
-        # role_id=obj.role_id,
 
         is_active=obj.is_active,
         is_superuser=obj.is_superuser,

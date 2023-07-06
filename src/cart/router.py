@@ -65,9 +65,11 @@ async def get_cart_by_order_id(
 async def create_cart_item(
         request: Request,
         new_data: CartCreate,
-        user: User = Depends(current_active_superuser),
+        user: User = Depends(current_active_user),
         session: AsyncSession = Depends(get_async_session),
 ):
+    if user.is_superuser is True:
+        raise HTTPException(status_code=409, detail="Корзину заполняют только клиенты!")
     obj, code, indexes = await crud_cart.create_item_cart(db=session, new_data=new_data)
     if code != 0:
         raise HTTPException(status_code=409, detail=code)
@@ -84,9 +86,11 @@ async def update_cart_item(
         request: Request,
         update_data: CartUpdate,
         item_id: int,
-        user: User = Depends(current_active_superuser),
+        user: User = Depends(current_active_user),
         session: AsyncSession = Depends(get_async_session),
 ):
+    # добавить проверку чтобы клиент не смог менять не свой заказ
+
     obj, code, indexes = await crud_cart.update_item_cart(db=session,
                                                           update_data=update_data,
                                                           item_id=item_id)
@@ -104,7 +108,7 @@ async def update_cart_item(
 async def delete_cart_item(
         request: Request,
         item_id: int,
-        user: User = Depends(current_active_superuser),
+        user: User = Depends(current_active_user),
         session: AsyncSession = Depends(get_async_session),
 ):
     obj, code, indexes = await crud_cart.delete_item_cart(db=session, item_id=item_id)

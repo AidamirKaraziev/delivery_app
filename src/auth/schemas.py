@@ -24,7 +24,6 @@ class UserRead(schemas.BaseUser[int]):
 
 
 class UserCreate(schemas.BaseUserCreate):
-    # id: int
     name: str
 
     email: str
@@ -43,25 +42,6 @@ class UserUpdate(schemas.BaseUserUpdate):
     phone_number: Optional[str]
 
 
-# проверить чтобы нигде не вызывалось - УДАЛИТЬ
-class UserGet(schemas.BaseUser[int]):
-    id: Optional[int]
-    name: Optional[str]
-    photo: Optional[str]
-
-    email: Optional[str]
-    phone_number: Optional[str]
-    registered_at: Optional[Date]
-
-    role_id: Optional[RoleGet]
-    is_active: bool = True
-    is_superuser: bool = False
-    is_verified: bool = False
-
-    class Config:
-        orm_mode = True
-
-
 # это нужно только для from main get_register_router
 class UserReadOld(schemas.BaseUser[int]):
     id: Optional[int]
@@ -78,4 +58,3 @@ class UserReadOld(schemas.BaseUser[int]):
 
     class Config:
         orm_mode = True
-

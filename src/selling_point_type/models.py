@@ -10,5 +10,4 @@ class SellingPointType(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
-    photo = Column(String, nullable=True)
     is_active = Column(Boolean, default=True, nullable=False)

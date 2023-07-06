@@ -19,6 +19,7 @@ def getting_selling_point(obj: SellingPointGet, request: Optional[Request] = Non
         photo=obj.photo,
         selling_point_type_id=getting_selling_point_type(obj.type) if obj.type is not None else None,
         address=obj.address,
+        opening_hours=obj.opening_hours,
         client_id=getting_user(obj=obj.user, request=request) if obj.user is not None else None,
         is_active=obj.is_active
     )
