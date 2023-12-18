@@ -11,21 +11,21 @@ def getting_dish(obj: DishGet, request: Request) -> Optional[DishGet]:
             obj.main_photo = url + str(obj.main_photo)
         else:
             obj.main_photo = None
-        if obj.photo1 is not None:
-            obj.photo1 = url + str(obj.photo1)
+        if obj.photo_1 is not None:
+            obj.photo_1 = url + str(obj.photo_1)
         else:
-            obj.photo1 = None
-        if obj.photo2 is not None:
-            obj.photo2 = url + str(obj.photo2)
+            obj.photo_1 = None
+        if obj.photo_2 is not None:
+            obj.photo_2 = url + str(obj.photo_2)
         else:
-            obj.photo2 = None
+            obj.photo_2 = None
 
     return DishGet(
         id=obj.id,
         name=obj.name,
         main_photo=obj.main_photo,
-        photo1=obj.photo1,
-        photo2=obj.photo2,
+        photo_1=obj.photo_1,
+        photo_2=obj.photo_2,
 
         description=obj.description,
         composition=obj.composition,
