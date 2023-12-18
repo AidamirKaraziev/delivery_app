@@ -10,7 +10,7 @@ from database import get_async_session
 async def check_roles(session: AsyncSession = Depends(get_async_session)):
     # Проверяем наличие ролей
     query_admin = select(Role).where(Role.name == 'admin', Role.id == 1)
-    query_user = select(Role).where(Role.name == 'user', Role.id ==2)
+    query_user = select(Role).where(Role.name == 'user', Role.id == 2)
 
     admin_role = await session.execute(query_admin)
     user_role = await session.execute(query_user)
@@ -29,7 +29,7 @@ async def check_roles(session: AsyncSession = Depends(get_async_session)):
 
 
 async def check_order_statuses(session: AsyncSession = Depends(get_async_session)):
-    # Проверям наличие статуслов
+    # проверить наличие статусов
     query_created = select(Status).where(Status.name == 'created', Status.id == 1)
     query_in_progress = select(Status).where(Status.name == 'in_progress', Status.id == 2)
     query_completed = select(Status).where(Status.name == 'completed', Status.id == 3)
@@ -91,5 +91,13 @@ async def create_roles():
 
 
 async def create_initial_data():
-    await create_roles()
-    await create_statuses()
+    try:
+        pass
+        await create_roles()
+    except Exception as e:
+        print(e)
+    try:
+        pass
+        await create_statuses()
+    except Exception as e:
+        print(e)
