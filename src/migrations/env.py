@@ -1,29 +1,23 @@
+import os
+import sys
+
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
-
 from alembic import context
 
-import os
-import sys
+from config import DB_HOST, DB_PORT, DB_USER, DB_NAME, DB_PASS
 
-sys.path.append(os.path.join(sys.path[0], 'src'))
-
-
-from src.config import DB_HOST, DB_PORT, DB_USER, DB_NAME, DB_PASS
-from src.auth.models import metadata as metadata_auth
-from src.role.models import metadata as metadata_role
-from src.promo.models import metadata as metadata_promo
-from src.dish.models import metadata as metadata_dish
-from src.selling_point.models import metadata as metadata_selling_point
-from src.selling_point_type.models import metadata as metadata_sp_type
-from src.order_status.models import metadata as metadata_status
-from src.cart.models import metadata as metadata_cart
-from src.order.models import metadata as metadata_order
-
-
-# from src.database import metadata
+from auth.models import metadata as metadata_auth
+from role.models import metadata as metadata_role
+from promo.models import metadata as metadata_promo
+from dish.models import metadata as metadata_dish
+from selling_point.models import metadata as metadata_selling_point
+from selling_point_type.models import metadata as metadata_sp_type
+from order_status.models import metadata as metadata_status
+from cart.models import metadata as metadata_cart
+from order.models import metadata as metadata_order
 
 
 # this is the Alembic Config object, which provides
@@ -32,11 +26,10 @@ config = context.config
 
 section = config.config_ini_section
 config.set_section_option(section, "DB_HOST", DB_HOST)
-config.set_section_option(section, "DB_NAME", DB_NAME)
 config.set_section_option(section, "DB_PORT", DB_PORT)
 config.set_section_option(section, "DB_USER", DB_USER)
+config.set_section_option(section, "DB_NAME", DB_NAME)
 config.set_section_option(section, "DB_PASS", DB_PASS)
-
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 if config.config_file_name is not None:
