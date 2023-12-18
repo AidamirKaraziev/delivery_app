@@ -15,8 +15,8 @@ class Dish(Base):
     name = Column(String, nullable=False)
 
     main_photo = Column(String, nullable=True)
-    photo1 = Column(String, nullable=True)
-    photo2 = Column(String, nullable=True)
+    photo_1 = Column(String, nullable=True)
+    photo_2 = Column(String, nullable=True)
 
     description = Column(String, nullable=True)
     composition = Column(String, nullable=True)
