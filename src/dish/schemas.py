@@ -8,8 +8,8 @@ class DishGet(BaseModel):
     name: Optional[str]
 
     main_photo: Optional[str]
-    photo1: Optional[str]
-    photo2: Optional[str]
+    photo_1: Optional[str]
+    photo_2: Optional[str]
 
     description: Optional[str]
     composition: Optional[str]
