@@ -4,7 +4,7 @@ from database import Base
 metadata = MetaData()
 
 
-class Status(Base):
+class OrderStatus(Base):
     __tablename__ = "order_status"
     metadata = metadata
 
