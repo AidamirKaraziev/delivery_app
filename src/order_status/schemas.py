@@ -1,16 +1,16 @@
 from pydantic import BaseModel
 
 
-class StatusGet(BaseModel):
+class OrderStatusGet(BaseModel):
     id: int
     name: str
 
 
-class StatusCreate(BaseModel):
+class OrderStatusCreate(BaseModel):
     name: str
 
 
-class StatusUpdate(BaseModel):
+class OrderStatusUpdate(BaseModel):
     name: str
 
 
