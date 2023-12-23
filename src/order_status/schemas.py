@@ -7,6 +7,7 @@ class OrderStatusGet(BaseModel):
 
 
 class OrderStatusCreate(BaseModel):
+    id: int
     name: str
 
 
