@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 from selling_point.schemas import SellingPointGet
 from cart.schemas import CartGet
-from order_status.schemas import StatusGet
+from order_status.schemas import OrderStatusGet
 
 
 class OrderGet(BaseModel):
@@ -19,7 +19,7 @@ class OrderGet(BaseModel):
     created_at: Optional[datetime] = None
     completed_at: Optional[datetime] = None
 
-    status_id: Optional[StatusGet] = None
+    status_id: Optional[OrderStatusGet] = None
     is_active: Optional[bool] = True
 
 
