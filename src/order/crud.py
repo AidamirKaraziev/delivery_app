@@ -5,8 +5,7 @@ from order.models import Order
 from order.schemas import OrderCreate, OrderUpdate
 
 from selling_point.models import SellingPoint
-from cart.models import Cart
-from order_status.models import Status
+from order_status.models import OrderStatus
 from core.base_crud import CRUDBase
 
 
@@ -31,7 +30,7 @@ class CrudOrder(CRUDBase[Order, OrderCreate, OrderUpdate]):
                 return None, "Not found selling point with this id", None
 
         # check order_status
-        query = select(Status).where(Status.id == new_data.status_id)
+        query = select(OrderStatus).where(OrderStatus.id == new_data.status_id)
         response = await db.execute(query)
         if response.scalar_one_or_none() is None:
             return None, "Not found order_status with this id", None
