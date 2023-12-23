@@ -1,13 +1,12 @@
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from order_status.models import Status
-from order_status.schemas import StatusCreate, StatusUpdate
+from order_status.models import OrderStatus
+from order_status.schemas import OrderStatusCreate, OrderStatusUpdate
 
 from core.base_crud import CRUDBase
 
 
-class CrudStatus(CRUDBase[Status, StatusCreate, StatusUpdate]):
+class CrudOrderStatus(CRUDBase[OrderStatus, OrderStatusCreate, OrderStatusUpdate]):
 
     async def get_status_by_id(self, *, db: AsyncSession, status_id: int):
         obj = await self.get(db=db, id=status_id)
@@ -20,4 +19,4 @@ class CrudStatus(CRUDBase[Status, StatusCreate, StatusUpdate]):
         return objects, 0, None
 
 
-crud_status = CrudStatus(Status)
+crud_status = CrudOrderStatus(OrderStatus)
