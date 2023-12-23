@@ -2,6 +2,9 @@ import os
 
 from dotenv import load_dotenv
 
+from order_status.schemas import OrderStatusCreate
+from role.schemas import RoleCreate
+
 load_dotenv()
 
 DB_HOST = os.environ.get("DB_HOST")
@@ -26,3 +29,12 @@ SUPERUSER_PASSWORD = os.environ.get("SUPERUSER_PASSWORD")
 
 SMTP_USER = os.environ.get("SMTP_USER")
 SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD")
+
+"""OrderStatus"""
+STATUS_CREATE = OrderStatusCreate(id=1, name='Создан')
+STATUS_IN_PROCESS = OrderStatusCreate(id=2, name='В процессе')
+STATUS_DONE = OrderStatusCreate(id=3, name='Готов')
+
+"""Role"""
+ROLE_ADMIN = RoleCreate(id=1, name='admin')
+ROLE_USER = RoleCreate(id=2, name='user')
