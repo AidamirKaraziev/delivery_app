@@ -8,8 +8,8 @@ class RoleGet(BaseModel):
     permissions: Optional[str]
 
 
-# формальность
 class RoleCreate(BaseModel):
+    id: int
     name: str = Field(..., title="Должность")
 
 
