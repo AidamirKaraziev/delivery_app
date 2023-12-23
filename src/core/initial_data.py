@@ -47,7 +47,7 @@ async def check_role(session: AsyncSession = Depends(get_async_session)):
 
 async def create_roles():
     async for db in get_async_session():
-        creation_list = await check_status(db)
+        creation_list = await check_role(db)
         [db.add(obj) for obj in creation_list]
         await db.commit()
         await db.close()
