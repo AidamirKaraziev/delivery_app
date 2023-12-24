@@ -23,7 +23,7 @@ class Order(Base):
 
     created_at = Column(TIMESTAMP, default=datetime.utcnow)
     completed_at = Column(TIMESTAMP, nullable=True)
-
+    # TODO rename status_id to order_status_id
     status_id = Column(Integer, ForeignKey(OrderStatus.id, ondelete="SET NULL"), nullable=True)
     is_active = Column(Boolean, default=True, nullable=False)
 

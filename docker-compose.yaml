@@ -2,23 +2,28 @@ version: "3.7"
 services:
   db:
     image: postgres:15
-    container_name: db_app
+    container_name: db_delivery
+    volumes:
+      - delivery-db-data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "5476:5476"
+    command: -p 5476
     env_file:
       - .env-non-dev
     depends_on:
       - redis
+    restart: always
+
 
   redis:
     image: redis:7
-    container_name: redis_app
-    command: --port 5370
+    container_name: redis_delivery
+    command: --port 5388
     expose:
-      - 5370
+      - 5388
     env_file:
       - .env-non-dev
-
+    restart: always
 
   app:
     build:
@@ -28,38 +33,43 @@ services:
       - .env-non-dev
     command: ["/delivery_app/docker/app.sh"]
     ports:
-      - 8000:8000
+      - 55661:55661
     depends_on:
       - db
       - redis
+    restart: always
+
+
 
   celery:
     build:
       context: .
     env_file:
       - .env-non-dev
-    container_name: celery_app
+    container_name: celery_delivery
     command: ["/delivery_app/docker/celery.sh", "celery"]
     depends_on:
+      - db
       - redis
-
+    restart: always
 
   flower:
     build:
       context: .
     env_file:
       - .env-non-dev
-    container_name: flower_app
+    container_name: flower_delivery
     command: ["/delivery_app/docker/celery.sh", "flower"]
     depends_on:
       - redis
       - celery
     ports:
-      - 8888:5555
+      - 8899:5555
+    restart: always
 
   pgadmin:
     image: dpage/pgadmin4
-    container_name: pgadmin
+    container_name: pgadmin_delivery
     depends_on:
       - db
       - redis
@@ -67,3 +77,7 @@ services:
       - "5050:5050"
     env_file:
       - .env-non-dev
+    restart: always
+
+volumes:
+  delivery-db-data:
