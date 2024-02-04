@@ -2,12 +2,13 @@ from typing import Optional
 from fastapi import Request
 
 from auth.schemas import UserRead
+from config import APP_PORT
 from role.getters import getting_role
 
 
 def getting_user(obj: UserRead,  request: Optional[Request]) -> Optional[UserRead]:
     if request is not None:
-        url = request.url.hostname + ":8000" + "/static/"
+        url = request.url.hostname + f":{APP_PORT}" + "/static/"
         if obj.photo is not None:
             obj.photo = url + str(obj.photo)
         else:

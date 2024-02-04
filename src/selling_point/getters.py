@@ -4,11 +4,12 @@ from fastapi import Request
 from selling_point.schemas import SellingPointGet
 from selling_point_type.getters import getting_selling_point_type
 from user.getters import getting_user
+from config import APP_PORT
 
 
 def getting_selling_point(obj: SellingPointGet, request: Optional[Request] = None) -> Optional[SellingPointGet]:
     if request is not None:
-        url = request.url.hostname + ":8000" + "/static/"
+        url = request.url.hostname + f":{APP_PORT}" + "/static/"
         if obj.photo is not None:
             obj.photo = url + str(obj.photo)
         else:

@@ -30,6 +30,8 @@ SUPERUSER_PASSWORD = os.environ.get("SUPERUSER_PASSWORD")
 SMTP_USER = os.environ.get("SMTP_USER")
 SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD")
 
+APP_PORT = os.environ.get("APP_PORT")
+
 """OrderStatus"""
 STATUS_CREATE = OrderStatusCreate(id=1, name='Создан')
 STATUS_IN_PROCESS = OrderStatusCreate(id=2, name='В процессе')
